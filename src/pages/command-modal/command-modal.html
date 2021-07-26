@@ -1,0 +1,104 @@
+
+<ion-header>
+  <ion-navbar  color="header-color">
+  <ion-buttons left>
+        <button ion-button icon-only (click)="viewCtrl.dismiss()" class="my-style-for-modal">
+            <ion-icon name="arrow-back"></ion-icon>
+        </button>
+   </ion-buttons>
+    <ion-title><span style=" font-size:16px;">Detail de la Commande </span></ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content >
+
+	<div *ngIf="isLoading">
+		<ion-row >
+			<ion-col style="text-align:center;margin-top:20px;">
+				Chargement du contenu, veuillez patienter ...
+				<img src="assets/imgs/loading.gif" height="80%" width="80%">
+			</ion-col>
+		</ion-row>
+	</div>
+
+	<div *ngIf="!isLoading">
+		<ion-list style="font-weight:bold;">
+			<ion-item >
+				<ion-row >
+				  <ion-col col-6 style="font-weight:bold;">Reference:</ion-col> 
+				  <ion-col col-6 style="" text-wrap>{{mareference}}</ion-col>
+				</ion-row>
+			</ion-item>
+			<ion-item>
+				<ion-row>
+				  <ion-col col-6 style="font-weight:bold;">Date de la commande:</ion-col> 
+				  <ion-col col-6>{{maDate | slice:0:10}} </ion-col>
+				</ion-row>
+			</ion-item>
+
+			<ion-item>
+				<ion-row>
+				  <ion-col text-wrap col-6 style="font-weight:bold;">Nombre d'articles</ion-col> 
+				  <ion-col col-6> {{quantity}} articles </ion-col>
+				</ion-row>
+			</ion-item>
+
+			<ion-item>
+				<ion-row>
+				  <ion-col col-6 style="font-weight:bold;">Total</ion-col> 
+				  <ion-col col-6 >Total: {{total | currency:' ':'symbol':'1.0-0' }} FCFA</ion-col>
+				</ion-row>
+			</ion-item>
+			<ion-item>
+				<ion-row>
+				  <ion-col col-6 style="font-weight:bold;" >Payée:</ion-col> 
+				  <ion-col col-6 *ngIf="isPaided" col-6> Oui </ion-col>
+				  <ion-col *ngIf="!isPaided" col-6> Non </ion-col> 
+				</ion-row>
+			</ion-item>
+			<ion-item>
+				<ion-row>
+				  <ion-col col-6 style="font-weight:bold;" >Livrée:</ion-col> 
+				  <ion-col col-6 *ngIf="isShipped" col-6> Oui </ion-col>
+				  <ion-col col-6 *ngIf="!isShipped" col-6> Non </ion-col> 
+				</ion-row>
+			</ion-item>
+			<ion-item *ngIf="maCommande.livraison.type==1">
+				<ion-row text-wrap>
+				  <ion-col col-6>Adresse de livraison:</ion-col> 
+				  <ion-col col-6 text-wrap> {{adress.name}} {{adress.firstName}}-{{adress.tel1}}/{{adress.tel2}}-{{adress.region}}-{{adress.town}}-{{adress.adress
+				  }}</ion-col>
+				</ion-row>
+			</ion-item>
+			<ion-item *ngIf="maCommande.livraison.type==2">
+				 <ion-row text-wrap>
+				  <ion-col col-6>Point de relais:</ion-col> 
+				  <ion-col col-6 text-wrap> {{maCommande.relais.nom}}-{{maCommande.relais.quartier}}-{{maCommande.relais.emplacement}}
+				  </ion-col>
+				</ion-row> 
+			</ion-item> 
+			<ion-item>
+				<ion-row text-wrap>
+				  <ion-col col-6 style="font-weight:bold;">Articles:</ion-col> 
+				  <ion-col col-6 text-wrap></ion-col>
+				</ion-row>
+				
+				<ion-row  style="border-bottom: 1px solid gray;" *ngFor="let item of mesProduits; let i = index">
+					<ion-col col-2  >
+						<p  style="text-align:center"> 
+							<img src="" [src]="baseUrl+'image/'+item.product.idImage" style="height:60px;"/>
+						</p>
+					</ion-col >
+					<ion-col col-9>
+						<p style="color:gray;font-size:12px;">{{item.product.marque.name}}</p>
+						<p  style="margin-top:0px;font-size:14px;">{{item.product.name}}</p>
+						<p style="margin-top:0px;font-size:12px; font-weight: bold;color: black;"> 
+							<span>{{item.quantity}} x {{item.price | currency:' ':'symbol':'1.0-0' }} FCFA = {{item.quantity * item.price | currency:' ':'symbol':'1.0-0'}} FCFA</span> 
+						</p>
+					</ion-col>
+				</ion-row>
+			</ion-item>
+		</ion-list>
+	</div>
+</ion-content>

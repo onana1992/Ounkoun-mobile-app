@@ -1,0 +1,137 @@
+<ion-header>
+  <ion-navbar color="header-color">
+    <ion-title><span style=" font-size:16px;">Mon profil</span></ion-title>
+	<ion-buttons right>
+      <button ion-button icon-only (click)="goTorecheche()" ><ion-icon name="search" ></ion-icon></button>
+	  <button ion-button icon-only (click)="openFavoris()" ><span style="font-size:16px;"><ion-icon name="heart"></ion-icon></span><sup style="margin-left:-9px;margin-top:-7px;"><span style="background-color:orange; min-height:5px; min-width:5px; border-radius:60%;padding:5px; font-size:7px;" > <span style="position:relative;top:1px;font-size:8px;">{{favorisSize}}</span></span > </sup> </button>
+	  <button ion-button icon-only (click)="openPanier()"><span style="font-size:16px;"><ion-icon name="cart" ></ion-icon></span><sup style="margin-left:-9px;margin-top:-7px;"><span style="background-color:orange; min-height:5px; min-width:5px; border-radius:60%;padding:5px; font-size:7px;" > <span style="position:relative;top:1px;font-size:8px;">{{panierSize}}</span></span > </sup></button>
+	  <button ion-button icon-only (tap)=" presentPopover($event)" ><ion-icon name="more"></ion-icon></button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content >
+	<div *ngIf="isLoading" style="height:100%">
+		<ion-row >
+			<ion-col style="text-align:center; text-color:gray; margin-top:50px;">
+				<img src="assets/imgs/loading.gif" height="100%" width="80%">
+			</ion-col>
+		</ion-row>
+	</div>
+	<div *ngIf="!isLoading" class="no-connected">
+		<ion-row style="padding:0px 0px 0px 0px; margin:-16px 0px 0px 0px;">
+			<ion-col col-12 style=" margin:0px 0px 0px 0px; padding:0px 0px 0px 0px; ">
+				<h5 style="color:gray;text-align:center; vertical-align:center; color:white; padding-top:4px; font-size:16px; background-color:gray; border: 1px solid gray;height:30px;"> 
+					Mes informations Personnelles 
+				</h5>
+				<br/>
+			</ion-col>
+		</ion-row> 
+		<form novalidate #form2="ngForm" (ngSubmit)="submitForm(form2)">
+			<ion-list style="margin-top:-20px;"> 
+				<ion-item>
+					<ion-label style="color:#EE7600;"  floating>Nom*</ion-label>
+					<ion-input  id="nom"
+								name="nom"
+								required 
+								minlength="2" 
+								[(ngModel)]="user.nom" 
+								#nom="ngModel">
+					</ion-input>
+				</ion-item>
+				<ion-row *ngIf="nom.invalid && ( nom.dirty || registrationFormSubmitted)">
+					<ion-col *ngIf="nom.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+						Valeur requise
+					</ion-col>
+					<ion-col *ngIf="nom.errors.minlength" style="font-size:10px;color:red;padding-left:15px;">
+						2 caractères au minimum
+					</ion-col>
+				</ion-row> 
+					
+				<ion-item>
+					<ion-label style="color:#EE7600;"  floating>Prenom*</ion-label>
+					<ion-input  id="prenom"
+								name="prenom"
+								required 
+								minlength="2" 	
+								[(ngModel)]="user.prenom" 
+								#prenom="ngModel">
+					</ion-input>
+				</ion-item>
+				
+				<ion-row *ngIf="prenom.invalid && (prenom.dirty || registrationFormSubmitted)">
+					<ion-col *ngIf="prenom.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+						Valeur requise
+					</ion-col>
+					<ion-col *ngIf="prenom.errors.minlength" style="font-size:10px;color:red;padding-left:15px;">
+						2 caractères au minimum
+					</ion-col>
+				</ion-row>
+				
+				<ion-item>
+					<ion-label style="color:#EE7600;"  floating>Login*</ion-label>
+					<ion-input  id="login"
+								name="login" 
+								[(ngModel)]="user.login" 
+								disabled
+								#login="ngModel">
+					</ion-input>
+				</ion-item>
+				
+				<ion-item>
+					<ion-label style="color:#EE7600;" floating>Pseudo*</ion-label>
+					<ion-input  id="pseudo"
+								name="pseudo" 
+								[(ngModel)]="user.pseudo" 
+								disabled
+								#pseudo="ngModel">
+					</ion-input>
+				</ion-item>
+				
+				
+				
+				 <ion-item>
+					<ion-label style="color:#EE7600;" floating>Date de naissance*</ion-label>
+					<ion-datetime 
+						required
+						id="dateDeNaiss"
+						name="dateDeNaiss"	
+						#dateDeNaiss="ngModel"
+						displayFormat="YYYY/MM/DD"
+						[(ngModel)]="user.dateDeNaiss">
+					</ion-datetime>
+				</ion-item>
+				<ion-row *ngIf="dateDeNaiss.invalid && ( dateDeNaiss.dirty || registrationFormSubmitted)">
+					<ion-col *ngIf="dateDeNaiss.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+						valeur requise
+					</ion-col>
+				</ion-row>  
+				
+				<ion-item>
+					<ion-label style="color:#EE7600;">sex*</ion-label>
+					<ion-select
+						required
+						id="sex"
+						name="sex"	
+						#sex="ngModel"
+						[(ngModel)]="user.sex">
+						<ion-option value="F" >Femme</ion-option>
+						<ion-option value="H">Homme</ion-option>
+					</ion-select>
+				</ion-item>
+				<ion-row *ngIf="sex.invalid && ( sex.dirty || registrationFormSubmitted)">
+					<ion-col *ngIf="sex.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+						Valeur requise
+					</ion-col>
+				</ion-row>
+			</ion-list> 
+			
+			<ion-row> 
+				<ion-col>
+					<button ion-button block color="costom-orange">Modifier </button>
+				</ion-col>	
+			</ion-row>
+		</form> 
+	</div>
+</ion-content>

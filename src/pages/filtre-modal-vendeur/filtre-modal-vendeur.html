@@ -1,0 +1,75 @@
+<ion-header>
+   <ion-navbar  color="header-color">
+	  <ion-buttons left>
+			<button ion-button icon-only (click)="dismiss()" class="my-style-for-modal">
+				<ion-icon name="arrow-back"></ion-icon>
+			</button>
+	   </ion-buttons>
+	   <ion-title><span style=" font-size:16px;"> Filtrer les resultats par: </span></ion-title>
+  	</ion-navbar>
+  <ion-toolbar color="header-color" id="test_class" >
+		<ion-row style="color:white; height:53px;margin-top:4px;margin-bottom:-3px;">
+			<ion-col col-4 style="text-align:center" [ngClass]="{active: tab==='tab2'}" > 
+				<ion-buttons>
+					<button ion-button icon-only (click)="changeTab('tab2')"><span style="font-size:16px;">Marque</span> </button>
+				</ion-buttons>
+			</ion-col>
+			<ion-col col-4 style="text-align:center" [ngClass]="{active: tab==='tab3'}" > 
+				<ion-buttons>
+					<button ion-button icon-only (click)="changeTab('tab3')"><span style="font-size:16px;">Prix</span> </button>
+				</ion-buttons>
+			</ion-col>
+		</ion-row>
+   </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content>
+	
+	<ion-row *ngIf="isLoading">
+		<ion-col style="text-align:center; text-color:gray;margin-top:30px;">
+			<img src="assets/imgs/loading.gif" height="80%" width="80%">
+		</ion-col>
+	</ion-row>
+
+	<ion-row *ngIf="!isLoading">
+		<ion-col col-12 *ngIf="tab=='tab2'" class="tab-marque">
+			<ion-list radio-group [(ngModel)]="marque">
+			  <ion-item  *ngFor="let mark of marques;let j = index">
+				<ion-label>{{mark.name}}</ion-label>
+				<ion-radio value="{{mark.name}}" [checked]="j==0"></ion-radio>
+			  </ion-item>
+			</ion-list>
+		</ion-col>
+		<ion-col col-12 *ngIf="tab=='tab3'" class="tab-prix">
+			<ion-item>
+			   <ion-label style="font-weight:bold;">Choisr un intervalle de prix</ion-label>
+			   {{filterPrice.lower}}<br/>
+			   <ion-range dualKnobs="true" [(ngModel)]="filterPrice"  [min]= myRange.lower [max]= myRange.upper step="100"   pin="true" snaps="true">
+					<ion-label range-left>{{minPrice}}</ion-label>
+					<ion-label range-right>{{maxPrice}}</ion-label>
+			   </ion-range>
+            </ion-item>
+		</ion-col>
+	</ion-row>
+</ion-content>
+
+
+
+<ion-footer>
+    <ion-toolbar color="header-color">
+		<ion-row>
+		  <ion-col col-6 style="text-align:center;border-right:2px solid orange;"> 
+			<ion-buttons>
+				<button ion-button (click)="dismiss()" icon-onl><span style="font-size:16px;">Annuler</span></button>
+			</ion-buttons>
+		  </ion-col>
+		  <ion-col col-6 style="text-align:center" > 
+			<ion-buttons>
+				<button  ion-button icon-only  (click)="launchFiltre()" [disabled]="isLoading" ><span style="font-size:16px;">Appliquer</span> </button>
+			</ion-buttons>
+		  </ion-col>
+		</ion-row>
+    </ion-toolbar>
+</ion-footer>

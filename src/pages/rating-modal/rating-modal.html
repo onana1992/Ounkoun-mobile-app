@@ -1,0 +1,87 @@
+<ion-header>
+   <ion-navbar  color="header-color">
+	  <ion-buttons left>
+			<button ion-button icon-only (click)="dismiss()" class="my-style-for-modal">
+				<ion-icon name="arrow-back"></ion-icon>
+			</button>
+	   </ion-buttons>
+	   <ion-title><span style=" font-size:16px;"> Notes/Avis sur le produit </span></ion-title>
+  	</ion-navbar>
+</ion-header>
+
+<ion-content>
+	<ion-row *ngIf="isLoading">		
+			<ion-col style="text-align:center; text-color:gray;margin-top:30px;">
+				chargement,veuillez patienter ...<br/>
+				<img src="assets/imgs/loading.gif" height="80%" width="80%">
+			</ion-col>
+	</ion-row>
+	<ion-row *ngIf="!isLoading">
+		
+		<ion-col col-12  padding style="color:gray;font-size:12px; padding-top:10px;padding-bottom:0px;">{{produit.marque.name}} 
+		</ion-col>
+
+		<ion-col col-12 padding style="font-size:18px;padding-top:0px;padding-bottom:0px;">
+			{{produit.name}} 
+		</ion-col>
+
+		<ion-col>
+		    <ion-col col-12 style="color:gray; margin-top: -20px;">
+		     <span><ion-icon style="font-size:20px;"  name="star" [ngClass]="{ 'light' : produit.notation.note >= 1}" > </ion-icon></span> <span><ion-icon name="star"  [ngClass]="{ 'light' : produit.notation.note >= 2}" style=";font-size:18px;" ></ion-icon></span> <span><ion-icon name="star"  [ngClass]="{ 'light' : produit.notation.note >= 3}" style="font-size:18px;" > </ion-icon></span> <span><ion-icon name="star"  [ngClass]="{ 'light' : produit.notation.note>=4}" style="font-size:18px;" > </ion-icon></span> <span> <ion-icon name="star"  [ngClass]="{ 'light' : produit.notation.note >= 5}" style="font-size:18px;" > </ion-icon></span> <span style="font-size:12px;"><ion-icon style="font-size:12px;">({{produit.notation.total}})</ion-icon></span>
+			</ion-col>
+		</ion-col> 
+
+		<ion-col col-12 style="text-align: center;">
+				<img src="assets/imgs/produit1.jpg" [src]="baseUrl+'image/'+produit.idBigImage1" style="height:180px;"/>
+		</ion-col> 
+        
+        
+        <ion-col> 
+           <p col-12 style="border-bottom: 1px solid gray; width: 100%; font-size:16px">
+        			Noter le produit
+        	</p>
+        </ion-col>
+        
+     
+		<ion-col col-12 style="margin-top: -20px;" >
+			<rating [(ngModel)]="rate" max="5" emptyStarIconName="star-outline"  halfStarIconName="star-half"     starIconName="star"  nullable="false"  (ngModelChange)="onModelChange($event)">
+        	</rating>
+		</ion-col> 
+
+		<ion-col col-12 style=" margin-bottom: 20px; margin-top:-10px;"> 	
+			<button ion-button block color="costom-orange" (click)="submitNotation()">Soumettre votre note</button>			
+	    </ion-col>
+
+	
+        <ion-col col-12 >
+        	<p col-12 style="border-bottom: 1px solid gray; width: 100%; font-size:16px">
+        			Donner votre avis
+        	</p>
+        </ion-col>
+   
+
+        <ion-col>
+        	<form novalidate #form2="ngForm" (ngSubmit)="submitComment(form2)">
+				<ion-list style="margin-top:-20px;"> 
+					<ion-item>
+						<ion-label style="color:#EE7600;"  floating>Votre avis </ion-label>
+						<ion-input  id="avis"
+									name="avis"
+									required 
+									minlength="2" 
+									[(ngModel)]="avis.value" 
+									#avis="ngModel"> 
+						</ion-input>
+					</ion-item><br>
+					<ion-row> 
+						<ion-col>
+							<button ion-button block color="costom-orange">Soumettre votre avis </button>
+						</ion-col>	
+					</ion-row>
+				</ion-list >
+			</form> 
+    	</ion-col> 
+
+    </ion-row>
+	
+</ion-content>

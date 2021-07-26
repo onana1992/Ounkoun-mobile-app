@@ -1,0 +1,95 @@
+page-produit-par-vendeur {
+	
+.active{
+color: #EE7600;
+}
+
+.cancelButton{
+	position:fixed;
+	top:85px;
+	z-index:9999;
+	margin-left:1%;
+}
+
+.info-favori , .info-panier{
+	background-color:gray;
+	color:white;
+	position:fixed;
+	top:85px;
+	z-index:9999;
+	font-size:14px;
+	margin-top:10px;
+	text-align: center;
+	width:95%;
+	margin-left:3%;
+}
+
+ion-content{
+	.model1{
+		ion-row{
+			ion-col{
+				
+				ion-row{
+					ion-col{
+						border: none;
+					}
+				}
+			}
+		}
+	}
+	
+	.model2{
+		ion-row{
+			ion-col{
+				ion-row{
+					ion-col{
+						border: none;
+						
+					}
+				}
+			}
+		}
+	}
+	
+	.model3{
+		
+		.no-border .item-md.item-block .item-inner {
+							border-bottom: none;
+		}
+		
+		ion-row{
+			ion-col{
+				
+				ion-row{
+					ion-col{
+						border: none;
+						
+					}
+				}
+			}
+		}
+	}
+	
+	.costum-button{
+		.item-md.item-block .item-inner {
+			padding-right: -10px;
+			border-bottom: 1px none;
+		}
+	
+	}
+	
+	.light{
+	color:#EE7600;
+	}
+	
+	.no-light{
+	color:gray;
+	}
+	
+}
+
+#circle{ background: #416998; width: 60px; height: 60px; border-radius: 64px; border: 2px solid #416998;}
+
+
+
+}

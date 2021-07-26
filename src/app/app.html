@@ -1,0 +1,88 @@
+<ion-menu  type="reveal" [content]="content" color="header-color">
+    <ion-header >
+	    <ion-toolbar color="header-color" style="border-bottom:1px solid orange;">
+	      <ion-title style="margin-top:5px;" >
+			<ion-row  (click)="openDownload()">
+			 <ion-col  style="text-align:center; height: 200px;">
+			 	<img src="assets/imgs/logo2.gif" height="100%" width="80%">
+			 </ion-col>
+			</ion-row>
+			<ion-row style="color:white; text-align:center;">
+				 <ion-col col-12 text-wrap>
+				 	Centre commercial  en ligne - Site de vente aux enchères
+				 </ion-col>
+		    </ion-row>
+		  </ion-title>
+	    </ion-toolbar>
+    </ion-header>
+
+	<ion-content class="sideMenu">
+		
+		<ion-item text-wrap class="item-icon-right"  style="border-bottom: 1px solid orange;">
+				<ion-row >
+					<ion-col col-1 style=" width:50px; color: blue;  padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px">
+							<img src="assets/imgs/enchere.jpg" height="90%" width="90%">
+					</ion-col>
+					<ion-col text-wrap style="height:20px;" col-11 (click)="openEnchere()" menuClose>
+						ESPACE DE VENTES AUX ENCHERES
+					</ion-col>
+				</ion-row>
+		</ion-item>
+
+		<ion-row class="tool-background tool-background-md" style="color:black; border-bottom: 1px solid orange;background-color:#d3d3d3;">
+			<ion-col col-12 style="height:40px;text-align:center; padding-top: 12px; font-size:14px; order-bottom: 1px solid orange;">
+				 DECOUVREZ NOS CATEGORIES 
+			</ion-col>
+		</ion-row>
+
+		<ion-list class="menu-ion-list">
+			<ion-item text-wrap class="item-icon-right" *ngFor="let categori of categories" style="border-bottom: 1px solid #d3d3d3;">
+				<ion-row >
+					<ion-col col-1 style=" width:50px; color: blue; margin-top: -15px;  padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px">
+							<img [src]="baseUrl+'image/'+categori.urlIcone" height="100%" width="100%">
+					
+					</ion-col>
+
+					<ion-col style="height:20px;" col-10 (click)="openCategorie(categori.name)" menuClose>
+						{{categori.name | uppercase}}
+					</ion-col>
+
+					<ion-col style="height:20px;margin-left:-3px;" col-1 (click)="toggleLevel1(categori.name)">
+						<span style="margin-left:60%;color:#416998; font-weight:bold;"> 
+						<ion-icon *ngIf="!isLevel1Shown(categori.name)" name = "md-add" ></ion-icon>
+						<ion-icon *ngIf="isLevel1Shown(categori.name)" name = "md-remove" ></ion-icon>
+						</span>
+					</ion-col>
+				</ion-row>
+				
+				<ion-list *ngIf="isLevel1Shown(categori.name)" >
+					<ion-item text-wrap *ngFor="let scategori of categori.category;let i=index; let l=last"  [ngClass]="{'level2Style': !l , 'level2LastStyle': l}" >
+						
+						<ion-row >
+							<ion-col style="height:20px;margin-top:-7px;" col-11 (click)="openSousCategorie(categori.name,scategori.name)" menuClose>
+								{{scategori.name}}
+							</ion-col>
+							<ion-col style="height:20px;margin-left:-3px;" col-1 (click)="toggleLevel2(scategori.name)">
+								<span style="margin-left:60%;color:#416998; font-weight:bold;">
+									<ion-icon *ngIf="!isLevel2Shown(scategori.name)"   name = "add" ></ion-icon>
+									<ion-icon  *ngIf="isLevel2Shown(scategori.name)"   name = "remove" ></ion-icon>
+								</span>
+							</ion-col>
+						</ion-row>	
+						<ion-list *ngIf="isLevel2Shown(scategori.name) " >
+							<ion-item  text-wrap *ngFor="let sscategori of scategori.category;let l1=last" [ngClass]="{'level3Style': !l1 , 'level3LastStyle': l1}">
+								<ion-col col-11 (click)="openSSousCategorie(sscategori.name)" menuClose>
+								{{sscategori.name}}
+								</ion-col>
+							</ion-item>
+						</ion-list>
+					</ion-item>
+				</ion-list>
+			
+			</ion-item>
+		</ion-list>
+ 	</ion-content>
+</ion-menu>
+
+<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"> </ion-nav>

@@ -1,0 +1,155 @@
+
+<ion-header>
+
+  <ion-navbar  color="header-color">
+  <ion-buttons left>
+        <button ion-button icon-only (click)="viewCtrl.dismiss()" class="my-style-for-modal">
+            <ion-icon name="arrow-back"></ion-icon>
+        </button>
+   </ion-buttons>
+    <ion-title><span style=" font-size:16px;"> Adresse</span></ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+	<div *ngIf="isLoading">
+		<ion-row >
+			<ion-col style="text-align:center; text-color:gray;margin-top:30px;">
+				modification de l'adresse de livraison,veuillez patienter ...
+				<br/><img src="assets/imgs/loading.gif" height="80%" width="80%">
+			</ion-col>
+		</ion-row>
+	</div>
+	<div *ngIf="!isLoading" >
+		<form novalidate #form4="ngForm" (ngSubmit)="submitForm(form4)">
+			<ion-list style="margin-top:-20px;">
+				<ion-item>
+					<ion-label  floating>Nom *</ion-label>
+					<ion-input  id="nom"
+								name="nom"
+								required 
+								minlength="2" 
+								[(ngModel)]="user.name" 
+								#nom="ngModel">
+					</ion-input>
+				</ion-item>
+				<ion-row *ngIf="nom.invalid && ( nom.dirty || registrationFormSubmitted)">
+					<ion-col *ngIf="nom.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+						Entrer une valeur
+					</ion-col>
+					<ion-col *ngIf="nom.errors.minlength" style="font-size:10px;color:red;padding-left:15px;">
+						Entrer un nom 2 caractere au moins
+					</ion-col>
+				</ion-row> 
+					
+				<ion-item>
+					<ion-label  floating>Prenom</ion-label>
+					<ion-input  id="prenom"
+								name="prenom" 
+								[(ngModel)]="user.firstName" 
+								#prenom="ngModel">
+					</ion-input>
+				</ion-item> 
+				
+				<ion-item>
+					<ion-label  floating>Telephone 1*</ion-label>
+					<ion-input  id="tel1"
+								name="tel1"
+								required 
+								minlength="2" 
+								[(ngModel)]="user.tel1" 
+								#tel1="ngModel">
+					</ion-input>
+				</ion-item>
+				<ion-row *ngIf="tel1.invalid && ( tel1.dirty || registrationFormSubmitted)">
+					<ion-col *ngIf="tel1.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+						Entrer une valeur
+					</ion-col>
+					<ion-col *ngIf="tel1.errors.minlength" style="font-size:10px;color:red;padding-left:15px;">
+						Entrer un nom 2 caractere au moins
+					</ion-col>
+				</ion-row> 
+				
+				<ion-item>
+					<ion-label  floating>Telephone 2 </ion-label>
+					<ion-input  id="tel2"
+								name="tel2"
+								minlength="2" 
+								[(ngModel)]="user.tel2" 
+								#tel2="ngModel">
+					</ion-input>
+				</ion-item>
+				<ion-row *ngIf="tel2.invalid && ( tel2.dirty || registrationFormSubmitted)">
+					<ion-col *ngIf="tel2.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+						Entrer une valeur
+					</ion-col>
+					<ion-col *ngIf="tel2.errors.minlength" style="font-size:10px;color:red;padding-left:15px;">
+						Entrer un nom 2 caractere au moins
+					</ion-col>
+				</ion-row>
+			</ion-list>
+			 
+			<ion-item >
+					<ion-label>Region*</ion-label>
+					<ion-select
+						required
+						id="region"
+						name="region"	
+						#region="ngModel"
+						[(ngModel)]="user.region"
+					    (ngModelChange)="changeNumber()">
+						<ion-option  *ngFor="let val of localites"  value="{{val.region}}" >{{val.region}}</ion-option>
+					</ion-select>
+			</ion-item>
+
+			<ion-row  *ngIf="region.invalid && ( region.dirty || registrationFormSubmitted)" >
+					<ion-col *ngIf="region.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+						Valeur requise
+					</ion-col>
+			</ion-row>
+			
+			<ion-item>
+					<ion-label>Ville*</ion-label>
+					<ion-select
+						required
+						id="ville"
+						name="ville"	
+						#ville="ngModel"
+						[(ngModel)]="user.town"
+						>
+						<ion-option *ngFor="let val of villes" value="{{val.name}}" >{{val.name}}</ion-option>
+					</ion-select>
+			</ion-item> 
+			<ion-row *ngIf="ville.invalid && ( ville.dirty || registrationFormSubmitted)">
+					<ion-col *ngIf="ville.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+						Valeur requise
+					</ion-col>
+			</ion-row>
+		
+			<ion-item>
+					<ion-label  floating>Adresse*</ion-label>
+					<ion-input  id="adresse"
+								name="adresse"
+								required 
+								minlength="2" 
+								[(ngModel)]="user.address" 
+								#adresse="ngModel">
+					</ion-input>
+			</ion-item>
+			<ion-row *ngIf="adresse.invalid && ( adresse.dirty || registrationFormSubmitted)">
+					<ion-col *ngIf="adresse.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+						Entrer une valeur
+					</ion-col>
+					<ion-col *ngIf="adresse.errors.minlength" style="font-size:10px;color:red;padding-left:15px;">
+						Entrer un nom 2 caractere au moins
+					</ion-col>
+			</ion-row><br/>
+			
+			<ion-row *ngIf="!hasAddress" > <button color="costom-orange" ion-button block >Creer </button> </ion-row>
+			<ion-row *ngIf="hasAddress" > <button color="costom-orange" ion-button block >Modifier </button> </ion-row><br/>
+			
+		</form>
+	</div>
+</ion-content>

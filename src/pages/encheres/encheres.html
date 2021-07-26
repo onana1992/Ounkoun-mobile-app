@@ -1,0 +1,223 @@
+<ion-header>
+
+  <ion-navbar text-wrap color="header-color">
+    <ion-title text-wrap>
+    	<span style=" font-size:16px; color:orange;margin-top:-5px;">Vente aux enchères </span>
+    </ion-title>
+	<ion-buttons right>
+		<button ion-button icon-only (click)="gotoRecherche()"><span ><ion-icon name="search" ></ion-icon></span> 
+		</button>
+	  	<button ion-button icon-only (tap)=" presentPopover($event)" >
+	  			<ion-icon name="more"></ion-icon>
+	  	</button>
+    </ion-buttons>
+  </ion-navbar>
+
+  <ion-toolbar style="min-height:30px;max-height:50px;">
+	<ion-row style="text-align:center;">
+
+		<ion-col col-6  style="border-right: 1px solid gray;"><ion-icon name="funnel"> <span style=" font-size:14px;">Filtres</span></ion-icon>
+		</ion-col>
+		
+		<ion-col col-6 *ngIf="view=='view2'" (click)="changeView('view2')" >  <ion-icon name="md-more">
+			<span style=" font-size:14px;">Affichage</span></ion-icon> 
+		</ion-col>
+
+		<ion-col col-6 *ngIf="view=='view3'" (click)="changeView('view3')" >  <ion-icon name="menu" >
+			<span style=" font-size:14px;">Affichage</span></ion-icon>
+		</ion-col>
+
+    </ion-row>
+   </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content fullscreen #myContent hide-fab style="">	
+
+    <ion-fab bottom right>
+			<button   ion-fab (click)="scrollToTop()" style="background-color:gray;" > <ion-icon name="md-arrow-up"></ion-icon></button>
+	</ion-fab>
+	
+
+	<ion-row *ngIf="isLoading" style="margin-top: 20px;">
+		<ion-col style="text-align:center;">
+			Chargement des produits, veuillez patienter ...
+			<img src="assets/imgs/loading.gif" height="80%" width="80%">
+		</ion-col>
+	</ion-row>
+
+	<div *ngIf="!isLoading">
+		<div class="model2" *ngIf="view=='view2'">
+			<ion-row *ngIf="!isLoading" style="margin-top: -10px;">
+			    <ion-col   *ngIf="categorie!='all'" col-12 style="font-size:18px;text-align:center;margin-top:25px; color:orange;"> 	{{categorie}} 
+			    </ion-col>
+
+			    <ion-col  *ngIf="categorie=='all'" col-12 style="font-size:18px;text-align:center;margin-top:25px;color:orange;"> Toutes les enchères
+			    </ion-col>
+
+				<ion-col col-12 style="color:gray;font-size:12px;text-align:center;margin-top:-14px;"> {{taille}} produits trouvés 
+				</ion-col> 
+			</ion-row>
+
+			<ion-row class="cat" style="font-size:8px; ">
+				<ion-col col-4  >
+					<div (click)="openCategorie('all')" style="text-align:center;background-color:#F3F0F0; border-radius:5%;">
+					<div [ngClass]="{'actual-cat':categorie === 'all'}" style="max-height:30px;min-height:30px;font-size:10px;padding-top:10px" >
+								Toutes les categories							</div>
+					</div>
+				</ion-col>
+
+				<ion-col col-4 *ngFor="let category of categories" >
+					<div [ngClass]="{'actual-cat':categorie === category}"  (click)="openCategorie(category)" style="text-align:center;background-color:#F3F0F0; border-radius:5%;">
+							<div style="max-height:30px;min-height:30px;font-size:10px;padding-top:10px" >
+								{{category}} 
+							</div>
+					</div>
+				</ion-col>
+			</ion-row>
+
+			<ion-row *ngFor="let produit of produits">
+				<ion-item text-wrap (click)="gotoProduct(produit.numEnchere)" >
+					<ion-row>
+						<ion-col col-4>
+							<img style="height:160px;"  [src]="baseUrl+'image/'+produit.idImage" /> 
+						</ion-col>
+
+						<ion-col col-8 padding>
+						
+							<p style="padding-top:0px;color:gray;font-size:12px;"> Enchere N°{{produit.numEnchere}}</p>
+
+							<p  style="margin-top:-2px;font-size:16px;color:black; margin-bottom: 3px;"> {{produit.name | limitTo:80}}
+							</p>
+
+							<p style="margin-top:0px; font-size:12px; color:black;" >
+								<span style="color:gray;"> Etat de l'article:</span> <span>{{produit.etat}} 
+								</span>
+							</p>
+
+							<p style="margin-top:0px; font-size:12px; color:black;" >
+								<span style="color:gray;"> Mise à prix :</span> <span>{{produit.initPrice | currency:' ':'symbol':'1.0-0'}} FCFA
+								</span>
+							</p>
+
+							<p style="margin-top:0px; font-size:12px; color:black;">
+								<span style="color:gray;" > Nombres d'enchères :</span><span> {{produit.historique.length}} </span>
+					
+							</p>
+
+
+							<p style="margin-top:0px; font-size:12px; color:black;">
+								<span  style=" color:gray;"> Vente se terminant </span> 
+								<span> le {{produit.closeDate.date | date:'d MMM  y, h:mm'}} </span>
+							</p>
+
+					
+							<p style="text-align:center;margin-top:10px;">
+								<button  color="costom-orange" ion-button round (click)="gotoProduct1(produit.numEnchere,$event)" ><span style=" font-size:10px;">Encherir</span></button>
+							</p>
+						</ion-col>
+					</ion-row>
+				</ion-item>
+			</ion-row> 
+
+			<ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="page < totalPage ">
+    			<ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="chargement de plus de donneé..."></ion-infinite-scroll-content>
+  			</ion-infinite-scroll>
+		</div>
+
+		<div class="model3" *ngIf="view=='view3'">
+
+			<ion-row *ngIf="!isLoading" style="margin-top: -10px;">
+			    <ion-col   *ngIf="categorie!='all'" col-12 style="font-size:18px;text-align:center;margin-top:25px; color:orange;"> 	{{categorie}} 
+			    </ion-col>
+
+			    <ion-col  *ngIf="categorie=='all'" col-12 style="font-size:18px;text-align:center;margin-top:25px;color:orange;"> Toutes les enchères
+			    </ion-col>
+
+				<ion-col col-12 style="color:gray;font-size:12px;text-align:center;margin-top:-14px;"> {{taille}} produits trouvés 
+				</ion-col> 
+			</ion-row>
+
+			<ion-row class="cat" style="font-size:8px; ">
+
+				<ion-col col-4  >
+					<div (click)="openCategorie('all')" style="text-align:center;background-color:#F3F0F0; border-radius:5%;">
+					<div [ngClass]="{'actual-cat':categorie === 'all'}" style="max-height:30px;min-height:30px;font-size:10px;padding-top:10px" >
+								Toutes les categories							</div>
+					</div>
+				</ion-col>
+
+				<ion-col col-4 *ngFor="let category of categories" >
+					<div [ngClass]="{'actual-cat':categorie === category}"  (click)="openCategorie(category)" style="text-align:center;background-color:#F3F0F0; border-radius:5%;">
+							<div style="max-height:30px;min-height:30px;font-size:10px;padding-top:10px" >
+								{{category}} 
+							</div>
+					</div>
+				</ion-col>
+			</ion-row>
+
+			<!-- <ion-row padding style="margin-top: -20px;">
+				<ion-item>
+					<ion-label>Filtrer par Categorie</ion-label> 
+					<ion-select
+							name="categorie"	
+							[(ngModel)]="categorie"
+							(ionChange)="changeOption()">
+							<ion-option  value="all" selected="true">	
+								Toutes les categories
+							</ion-option>
+							<ion-option  *ngFor="let category of categories" value="{{category}}" >		
+								{{category}}
+							</ion-option>
+					</ion-select>
+				</ion-item>
+			</ion-row> -->
+
+			<ion-row *ngFor="let produit of produits">
+				<ion-item text-wrap (click)="gotoProduct(produit.numEnchere)" >
+		
+					<p  style="text-align:center"> 	
+						<img style="height:160px;"  [src]="baseUrl+'image/'+produit.idImage" /> 
+					</p>
+						
+					<p style="padding-top:0px;color:gray;font-size:12px;"> Enchere N°{{produit.numEnchere}}</p>
+
+					<p  style="margin-top:-2px;font-size:16px;color:black; margin-bottom: 3px;"> 				{{produit.name | limitTo:80}}
+					</p>
+
+					<p style="margin-top:0px; font-size:12px; color:black;" >
+						<span style="color:gray;"> état de l'article:</span> 
+						<span>{{produit.etat}} </span>
+					</p>
+
+					<p style="margin-top:0px; font-size:12px; color:black;" >
+						<span style="color:gray;"> Mise à prix :</span> <span>{{produit.initPrice | currency:' ':'symbol':'1.0-0'}} FCFA
+						</span>
+					</p>
+
+					<p style="margin-top:0px; font-size:12px; color:black;">
+						<span style="color:gray;" > nombres d'enchères :</span><span> {{produit.historique.length}} </span>
+					
+					</p>
+
+
+					<p style="margin-top:0px; font-size:12px; color:black;">
+						<span  style=" color:gray;"> vente se terminant </span> 
+						<span> le {{produit.closeDate.date | date:'d MMM  y, h:mm'}} </span>
+					</p>
+
+					
+					<p style="text-align:center;margin-top:10px;">
+						<button  color="costom-orange" ion-button round (click)="gotoProduct1(produit.numEnchere,$event)" ><span style=" font-size:10px;">Encherir</span></button>
+					</p>
+				</ion-item>
+			</ion-row> 
+
+			<ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="page < totalPage ">
+    			<ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="chargement de plus de donneé...">
+    			</ion-infinite-scroll-content>
+  			</ion-infinite-scroll>
+		</div>
+	</div>
+</ion-content>

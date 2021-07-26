@@ -1,0 +1,50 @@
+<ion-header>
+	<ion-navbar  color="header-color">
+	  <ion-buttons left>
+			<button ion-button icon-only (click)="dismiss()" class="my-style-for-modal">
+				<ion-icon name="arrow-back"></ion-icon>
+			</button>
+	   </ion-buttons>
+	   <ion-title><span style=" font-size:16px;"> Historique des enchères </span></ion-title>
+  	</ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+	<ion-row *ngIf="isLoading" style="margin-top: 20px;">
+		<ion-col style="text-align:center;">
+			Chargement du contenu, veuillez patienter ...
+			<img src="assets/imgs/loading.gif" height="80%" width="80%">
+		</ion-col>
+	</ion-row>
+
+	<ion-row  style="" *ngIf="!isLoading" >
+
+		<ion-col col-12 style="background-color: #F3F0F0;">
+			<ion-row  >
+				<ion-col col-12 style="border-bottom: 1px solid gray; text-align:center; ">
+					ENCHERE GAGANTE
+				</ion-col> 
+			</ion-row>
+			<ion-row >
+				<ion-col col-5 style="color:gray;"> {{enchereGagnant.idUser}} </ion-col>
+				<ion-col col-7 style=""> {{enchereGagnant.price}} <br> {{enchereGagnant.date.date | date:'d MMM  y, h:mm'}} </ion-col>
+			</ion-row>
+		</ion-col>
+
+		<ion-col col-12 style="background-color: #F3F0F0; margin-top: 20px;">
+			<ion-row  >
+				<ion-col col-12 style="border-bottom: 1px solid gray; text-align:center; ">
+					HISTORIQUE DES ENCHERES
+				</ion-col> 
+			</ion-row>
+			<ion-row *ngFor="let enchere of historique">
+				<ion-col col-5 style="color:gray;"> {{enchere.idUser}} </ion-col>
+				<ion-col col-7 style=""> {{enchere.price}} <br> {{enchere.date.date | date:'d MMM  y, h:mm'}} </ion-col>
+			</ion-row>
+		</ion-col>
+
+	</ion-row>
+
+</ion-content>

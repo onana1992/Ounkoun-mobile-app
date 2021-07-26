@@ -1,0 +1,178 @@
+
+<ion-header>
+ <ion-navbar color="header-color">
+    <ion-title><span style=" font-size:16px;">Adresse </span></ion-title>
+	<ion-buttons right>
+      <button ion-button icon-only (click)="goTorecheche()" ><ion-icon name="search" ></ion-icon></button>
+	  <button ion-button icon-only (click)="openFavoris()" ><span style="font-size:16px;"><ion-icon name="heart"></ion-icon></span><sup style="margin-left:-9px;margin-top:-7px;"><span style="background-color:orange; min-height:5px; min-width:5px; border-radius:60%;padding:5px; font-size:7px;" > <span style="position:relative;top:1px;font-size:8px;">{{favorisSize}}</span></span > </sup> </button>
+	  <button ion-button icon-only (click)="openPanier()"><span style="font-size:16px;"><ion-icon name="cart" ></ion-icon></span><sup style="margin-left:-9px;margin-top:-7px;"><span style="background-color:orange; min-height:5px; min-width:5px; border-radius:60%;padding:5px; font-size:7px;" > <span style="position:relative;top:1px;font-size:8px;">{{panierSize}}</span></span > </sup></button>
+	  <button ion-button icon-only (tap)=" presentPopover($event)"><ion-icon name="more"></ion-icon></button> 
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+	<div *ngIf="isLoading">
+		<ion-row >
+			<ion-col style="text-align:center; text-color:gray;margin-top:30px;">
+				<img src="assets/imgs/loading.gif" height="80%" width="80%">
+			</ion-col>
+		</ion-row>
+	</div>
+	<div *ngIf="!isLoading" >
+		<ion-row style="padding:0px 0px 0px 0px; margin:-16px 0px 0px 0px;">
+			<ion-col col-12 style=" margin:0px 0px 0px 0px; padding:0px 0px 0px 0px; ">
+				<h5 style="color:gray;text-align:center; vertical-align:center; color:white; padding-top:4px; font-size:16px; background-color:gray; border: 1px solid gray;height:30px;"> 
+					Mon adresse de livraison
+				</h5>
+				<br/>
+			</ion-col>
+		</ion-row> 
+		<ion-row *ngIf="!hasAddress" style="margin-top:-20px;">
+			<ion-col col-12>
+				<p style="text-align:center;" >vous ne possedez pas d'adresse de livraison, veuillez remplir le formulaire suivant pour en creer </p><br/>
+			</ion-col>
+		</ion-row>
+
+		
+	
+		<form novalidate #form4="ngForm" (ngSubmit)="submitForm(form4)">
+		
+			<ion-list style="margin-top:-30px;">
+				<ion-item>
+					<ion-label  floating>Nom du receptionneur*</ion-label>
+					<ion-input  id="nom"
+								name="nom"
+								required 
+								minlength="2" 
+								[(ngModel)]="user.name" 
+								#nom="ngModel">
+					</ion-input>
+				</ion-item>
+				<ion-row *ngIf="nom.invalid && ( nom.dirty || registrationFormSubmitted)">
+					<ion-col *ngIf="nom.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+						Valeur requise
+					</ion-col>
+					<ion-col *ngIf="nom.errors.minlength" style="font-size:10px;color:red;padding-left:15px;">
+						Entrer un nom 2 caractere au moins
+					</ion-col>
+				</ion-row> 
+					
+				<ion-item>
+					<ion-label  floating>Prenom</ion-label>
+					<ion-input  id="prenom"
+								name="prenom" 
+								[(ngModel)]="user.firstName" 
+								#prenom="ngModel">
+					</ion-input>
+				</ion-item> 
+				
+				<ion-item>
+					<ion-label  floating>Telephone 1 du receptionnaire*</ion-label>
+					<ion-input  id="tel1"
+								name="tel1"
+								required 
+								minlength="2" 
+								[(ngModel)]="user.tel1" 
+								#tel1="ngModel">
+					</ion-input>
+				</ion-item>
+				<ion-row *ngIf="tel1.invalid && ( tel1.dirty || registrationFormSubmitted)">
+					<ion-col *ngIf="tel1.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+						Entrer une valeur
+					</ion-col>
+					<ion-col *ngIf="tel1.errors.minlength" style="font-size:10px;color:red;padding-left:15px;">
+						Entrer un nom 2 caractere au moins
+					</ion-col>
+				</ion-row> 
+				
+				<ion-item>
+					<ion-label  floating>Telephone 2 du receptionnaire</ion-label>
+					<ion-input  id="tel2"
+								name="tel2"
+								minlength="2" 
+								[(ngModel)]="user.tel2" 
+								#tel2="ngModel">
+					</ion-input>
+				</ion-item>
+				<ion-row *ngIf="tel2.invalid && ( tel2.dirty || registrationFormSubmitted)">
+					<ion-col *ngIf="tel2.errors.minlength" style="font-size:10px;color:red;padding-left:15px;">
+						Entrer un nom 2 caractere au moins
+					</ion-col>
+				</ion-row>
+			</ion-list>
+			
+			<ion-item >
+					<ion-label>Region*</ion-label>
+					<ion-select
+						required
+						id="region"
+						name="region"	
+						#region="ngModel"
+						[(ngModel)]="user.region"
+					    (ngModelChange)="changeNumber()">
+						<ion-option  *ngFor="let val of localites"  value="{{val.region}}" >{{val.region}}</ion-option>
+					</ion-select>
+			</ion-item>
+
+			<ion-row  *ngIf="region.invalid && ( region.dirty || registrationFormSubmitted)" >
+					<ion-col *ngIf="region.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+						Valeur requise
+					</ion-col>
+			</ion-row>
+			
+			<ion-item>
+					<ion-label>Ville*</ion-label>
+					<ion-select
+						required
+						id="ville"
+						name="ville"	
+						#ville="ngModel"
+						[(ngModel)]="user.town"
+						>
+						<ion-option *ngFor="let val of villes" value="{{val.name}}" >{{val.name}}</ion-option>
+					</ion-select>
+			</ion-item> 
+			<ion-row *ngIf="ville.invalid && ( ville.dirty || registrationFormSubmitted)">
+					<ion-col *ngIf="ville.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+						Valeur requise
+					</ion-col>
+			</ion-row> 
+		 
+			<ion-item>
+			
+					<ion-label  floating>Adresse*</ion-label>
+					<ion-input  id="adresse"
+								name="adresse"
+								required 
+								minlength="2" 
+								[(ngModel)]="user.address" 
+								#adresse="ngModel">
+					</ion-input>
+			</ion-item>
+			
+			<ion-row *ngIf="adresse.invalid && ( adresse.dirty || registrationFormSubmitted)">
+					<ion-col *ngIf="adresse.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+						 Valeur requise
+					</ion-col>
+					<ion-col *ngIf="adresse.errors.minlength" style="font-size:10px;color:red;padding-left:15px;">
+						Entrer un nom 2 caractere au moins
+					</ion-col>
+			</ion-row><br/>
+			
+			<ion-row *ngIf="!hasAddress"> 
+				<ion-col>	
+					<button color="costom-orange" ion-button block >Creer </button> 
+				</ion-col>
+			</ion-row>
+			<ion-row *ngIf="hasAddress"> 
+				<ion-col>
+					<button color="costom-orange" ion-button block >
+						Modifier 
+					</button> 
+				</ion-col>
+			</ion-row><br/>
+		</form>
+	</div> 
+
+</ion-content>

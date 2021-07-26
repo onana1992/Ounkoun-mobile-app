@@ -1,0 +1,186 @@
+<ion-header>
+  <ion-navbar color="header-color">
+    <ion-title><span style=" font-size:16px;">Inscription</span></ion-title>
+	
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+	<div *ngIf="isLoading">
+		<ion-row >
+			<ion-col style="text-align:center; margin-top:30px;">
+				Creation du compte,veuillez patienter ...
+			<img src="assets/imgs/loading.gif" height="80%" width="80%">
+			</ion-col>
+		</ion-row>
+	</div>
+	<div *ngIf="!isLoading" class="no-connected">
+		<ion-row style="">
+			<ion-col col-12>
+				<h4 style="color:gray;text-align:center;">Creer un compte </h4>
+			</ion-col>
+		</ion-row>
+		<ion-row *ngIf="accountExist" style="margin-top:-30px;">
+			<ion-col col-12>
+				<p style="color:red;text-align:center; font-size:14px;"> Compte avec email/tel deja existant </p>
+			</ion-col>
+		</ion-row>
+		<form novalidate #form1="ngForm" (ngSubmit)="submitForm(form1)">
+			<ion-list style="margin-top:-20px;">
+				<ion-item>
+					<ion-label  floating>Nom*</ion-label>
+					<ion-input  id="nom"
+								name="nom"
+								required 
+								minlength="2" 
+								[(ngModel)]="user.nom" 
+								#nom="ngModel">
+					</ion-input>
+				</ion-item>
+				<ion-row *ngIf="nom.invalid && ( nom.dirty || registrationFormSubmitted)">
+					<ion-col *ngIf="nom.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+						valeur requise
+					</ion-col>
+					<ion-col *ngIf="nom.errors.minlength" style="font-size:10px;color:red;padding-left:15px;">
+						2 caractères au minimum requis
+					</ion-col>
+				</ion-row> 
+					
+				<ion-item>
+					<ion-label  floating>Prenom*</ion-label>
+					<ion-input  id="prenom"
+								name="prenom" 
+								required 
+								minlength="2" 
+								[(ngModel)]="user.prenom" 
+								#prenom="ngModel">
+					</ion-input>
+				</ion-item>
+				<ion-row *ngIf="prenom.invalid && ( prenom.dirty || registrationFormSubmitted)">
+					<ion-col *ngIf="prenom.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+						valeur requise
+					</ion-col>
+					<ion-col *ngIf="prenom.errors.minlength" style="font-size:10px;color:red;padding-left:15px;">
+						2 caractères au minimum requis
+					</ion-col>
+				</ion-row>
+				
+				
+				 <ion-item>
+					<ion-label floating>Date de naissance*</ion-label>
+					<ion-datetime 
+						required
+						id="dateDeNaiss"
+						name="dateDeNaiss"	
+						#dateDeNaiss="ngModel"
+						displayFormat="YYYY/MM/DD"
+						[(ngModel)]="user.dateDeNaiss"
+						>
+					</ion-datetime>
+				</ion-item>
+				<ion-row *ngIf="dateDeNaiss.invalid && ( dateDeNaiss.dirty || registrationFormSubmitted)">
+					<ion-col *ngIf="dateDeNaiss.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+						valeur requise
+					</ion-col>
+				</ion-row>  
+				
+				<ion-item>
+					<ion-label>sex*</ion-label>
+					<ion-select
+						required
+						id="sex"
+						name="sex"	
+						#sex="ngModel"
+						
+						[(ngModel)]="user.sex">
+						<ion-option value="H" selected="true">Femme</ion-option>
+						<ion-option value="F">Homme</ion-option>
+					</ion-select>
+				</ion-item>
+				<ion-row *ngIf="sex.invalid && ( sex.dirty || registrationFormSubmitted)">
+					<ion-col *ngIf="sex.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+						valeur requise
+					</ion-col>
+				</ion-row>
+				
+				<ion-item>
+					<ion-label  floating>Email/Tel*</ion-label>
+					<ion-input  id="login"
+								name="login"
+								required 
+								minlength="2" 
+								[(ngModel)]="user.login" 
+								#login="ngModel"
+								pattern="(^([A-Za-z0-9])+\@([A-Za-z0-9])+\.([A-Za-z]{2,4})$)|(^6[0-9]{8}$)">
+					</ion-input>
+				</ion-item>
+				<ion-row *ngIf="login.invalid && ( login.dirty || registrationFormSubmitted)">
+					<ion-col *ngIf="login.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+						valeur requise
+					</ion-col>
+					<ion-col *ngIf="login.errors.minlength" style="font-size:10px;color:red;padding-left:15px;">
+						Entrer un nom 2 caractere au moins
+					</ion-col>
+					<ion-col *ngIf="login.errors.pattern" style="font-size:10px;color:red;padding-left:15px;">
+						Entrer une adresse email ou un numero de telephone valide
+					</ion-col>
+				</ion-row> 
+				<ion-item>
+					<ion-label  floating>Mot de passe*</ion-label>
+					<ion-input  id="password"
+								name="password"
+								[type]="passwordType" 
+								clearOnEdit="false"
+								required 
+								minlength="6" 
+								[(ngModel)]="user.password" 
+								#password="ngModel">
+					</ion-input>
+					<ion-icon item-end [name]="passwordIcon" class="passwordIcon" (click)='hideShowPassword()'>
+					</ion-icon>
+				</ion-item>
+				<ion-row *ngIf="password.invalid && ( password.dirty || registrationFormSubmitted)">
+					<ion-col *ngIf="password.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+						valeur requise
+					</ion-col>
+					<ion-col *ngIf="password.errors.minlength" style="font-size:10px;color:red;padding-left:15px;">
+						6 caractere au minimum
+					</ion-col>
+				</ion-row>
+				<ion-item>
+					<ion-label  floating>Confirmation Mot de passe*</ion-label>
+					<ion-input  id="rePassword"
+								[type]="rePasswordType" 
+								clearOnEdit="false"
+								name="rePassword"
+								required 
+								minlength="6" 
+								[(ngModel)]="user.rePassword" 
+								#rePassword="ngModel">
+					</ion-input>
+					<ion-icon item-end [name]="rePasswordIcon" class="rePasswordIcon" (click)='hideShowRePassword()'>
+					</ion-icon>
+				</ion-item>
+				<ion-row *ngIf="rePassword.invalid && (rePassword.dirty || registrationFormSubmitted)">
+					<ion-col *ngIf="rePassword.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+						valeur requise
+					</ion-col>
+					<ion-col *ngIf="rePassword.errors.minlength" style="font-size:10px;color:red;padding-left:15px;">
+						6 caractere au minimum
+					</ion-col>
+				</ion-row>
+				<ion-row *ngIf="(user.rePassword!= user.password) && (rePassword.dirty || registrationFormSubmitted)">
+					<ion-col  style="font-size:10px;color:red;padding-left:15px;">
+						mot de passe non identique 
+					</ion-col>
+				</ion-row>
+			</ion-list>
+			
+			<ion-row> <button ion-button block color="costom-orange"> Creer </button></ion-row><br/>
+			<p style="text-align:center;color:gray;">Vous avez deja un compte ? <span style="color:#488aff;font-size:18px;" (click)="goTo('connexion')">Connectez vous</span>
+			</p>
+			<br/><br/><br/><br/><br/><br/><br/>
+		</form>
+	</div>
+	</ion-content>

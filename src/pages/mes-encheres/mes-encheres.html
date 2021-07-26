@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-navbar color="header-color">
+    <ion-title><span style=" font-size:16px;">Mes enchères en cours</span></ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content >
+
+	<div *ngIf="isLoading">
+		<ion-row >
+			<ion-col style="text-align:center;margin-top:30px;">
+				Chargement  des encheres,veuillez patienter ...
+				<img src="assets/imgs/loading.gif" height="80%" width="80%">
+			</ion-col>
+		</ion-row>
+	</div>
+
+	<ion-row *ngIf="!isLoading">  
+		<ion-col col-12 style="font-size:14px;text-align:center;font-weight: bold; margin-top: 5px;"> 
+			{{encheres.length}} enchères en cours 
+		</ion-col> 
+	</ion-row>
+
+	<ion-list *ngIf="!isLoading">
+		<button (click)="gotoProduct(enchere.numEnchere)" ion-item  *ngFor="let enchere of encheres ;let i = index">
+			<ion-row >
+				<ion-col col-4 text-wrap>
+					<p style="color:black; font-weight:bold;">{{enchere.numEnchere}}</p>
+					<p style="">{{enchere.date.date | date:'dd/MM/yyyy'}}</p>
+				</ion-col>
+				<ion-col col-8 style="text-align:center; font-size: 14px; color: black;" text-wrap>
+					<p>{{enchere.article}}</p> 
+				</ion-col>
+			</ion-row>
+		</button>
+	</ion-list>
+
+</ion-content>

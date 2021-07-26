@@ -1,0 +1,355 @@
+<ion-header>
+	<ion-navbar color="header-color">
+		<ion-title><span style=" font-size:16px;"> Validation de la commande</span></ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content padding style="background-color:#f5f5f5;">
+	<div *ngIf="isLoading">
+		<ion-row >
+			<ion-col style="text-align:center;margin-top:20px;">
+				Chargement du contenu, veuillez patienter ...
+				<img src="assets/imgs/loading.gif" height="80%" width="80%">
+			</ion-col>
+		</ion-row>
+	</div>
+	<div *ngIf="!isLoading">
+	
+		<ion-row style="border-bottom: 1px solid gray;"  style="background-color:white;">
+			<ion-col col-2>
+				<div id="circle">
+					<div> 1 </div>
+				</div>
+			</ion-col>
+			
+			<ion-col col-9 style="font-weight:bold; margin-top:5px;" >Votre Email/Tel 
+			</ion-col>
+			
+			<ion-col col-1 style="font-weight:bold; margin-top:2px; " >
+				<ion-icon name="checkmark" style="color:green"></ion-icon>
+			</ion-col>
+			
+			<ion-col col-12 style="text-align:center;">
+				<span >{{login}}</span>
+			</ion-col>
+		</ion-row>
+	
+		<ion-row style="border-bottom: 1px solid gray;"  style="background-color:white;">
+			<ion-col col-2>
+				<div id="circle">
+					<div> 2 </div>
+				</div>
+			</ion-col>
+			
+			<ion-col col-9 style="font-weight:bold; margin-top:5px; " >Votre adresse
+			</ion-col>
+			
+			<ion-col *ngIf="hasConfirmAdress==true" col-1 style="font-weight:bold; margin-top:2px; " >
+				<ion-icon name="checkmark" style="color:green"></ion-icon>
+			</ion-col>
+			
+			<ion-col *ngIf="!hasConfirmAdress" col-1 style="font-weight:bold; margin-top:2px; " >
+				<ion-icon name="checkmark" style="color:#d9d9d9"></ion-icon>
+			</ion-col>
+			
+			
+			<ion-col *ngIf="!hasAddress" style="text-align:center;">
+				<p style="text-align:center;">Vous n'avez pas d'adresse crée, creer une adresse de livraison</p>
+				<button ion-button color="costom-orange"  style=";color:white; font-size:10px;" (click)="showAdressModal()"> <span style="font-size:11px;">Creer une  adresse </span></button>
+			</ion-col>
+			
+			<ion-col col-12 style="text-align:center;" *ngIf="!hasConfirmAdress && hasAddress">
+				<table style="border: 1px solid black; border-collapse: collapse; width:100%;font-size:16px;">
+					<tr>
+						<td style="border: 1px solid black;">Nom </td>
+						<td style="border: 1px solid black;">{{adresseLivraison.name}}</td>
+					</tr>
+					<tr>
+						<td style="border: 1px solid black;">Prenom </td>
+						<td style="border: 1px solid black;">{{adresseLivraison.firstName}}</td>
+					</tr>
+					<tr>
+						<td style="border: 1px solid black;">Telephone 1</td>
+						<td style="border: 1px solid black;">{{adresseLivraison.tel1}}</td>
+					</tr>
+					<tr>
+						<td style="border: 1px solid black;">Telephone 2</td>
+						<td style="border: 1px solid black;">{{adresseLivraison.tel2}}</td>
+					</tr>
+					<tr>
+						<td style="border: 1px solid black;">Region</td>
+						<td style="border: 1px solid black;">{{adresseLivraison.region}}</td>
+					</tr>
+					<tr>
+						<td style="border: 1px solid black;">Ville</td>
+						<td style="border: 1px solid black;">{{adresseLivraison.town}}</td>
+					</tr>
+					<tr>
+						<td style="border: 1px solid black;">Adresse</td>
+						<td style="border: 1px solid black;"> {{adresseLivraison.adresse}}</td>
+					</tr>
+
+				</table>
+				<ion-row>
+					<ion-col col-6  style="font-size:10px;">
+						<button ion-button  color="costom-orange" style="color:white; font-size:10px;" (click)="hasConfirmAdress=true; initCanHomeShipping();"> <span style="font-size:11px;">Utiliser cette adresse </span></button>
+					</ion-col>
+					<ion-col col-6>
+						<button ion-button color="costom-orange"   style="color:white; font-size:10px;" (click)="showAdressModal()"> <span style="font-size:11px;">Modifier cette adresse </span></button>
+					</ion-col>
+				</ion-row>
+
+			</ion-col>
+			
+			<ion-col style="text-align:center;" *ngIf="hasConfirmAdress && hasAddress" >
+			    <ion-row style="margin-top:-10px;">
+					<ion-col offset-7  style="font-size:11px; color:#416998">
+						<ion-icon (click)="hasConfirmAdress=false;hasConfirmLivraisonMode=false;hasConfirmCommand=false;"  name="md-create"><span style="font-size:11px; color:#416998">Modifier votre adresse</span></ion-icon>
+					</ion-col>
+				</ion-row>
+				<ion-row style="margin-top:-5px;">
+					<ion-col>
+						<span>{{adresseLivraison.name}}</span> <span>{{adresseLivraison.firstName}}</span>-
+						<span>{{adresseLivraison.tel1}}</span>/<span> {{adresseLivraison.tel2}}</span>- <span> {{adresseLivraison.region}}</span>-
+						<span> {{adresseLivraison.town}}</span>- <span> {{adresseLivraison.adresse}}</span>
+					</ion-col>
+				</ion-row>
+			</ion-col>
+			
+		</ion-row>
+		
+		<ion-row style="border-bottom: 1px solid gray;"  style="background-color:white;">
+			
+			<ion-col col-2>
+				<div id="circle">
+					<div> 3 </div>
+				</div>
+			</ion-col>
+			
+			<ion-col col-9 style="font-weight:bold; margin-top:5px; " >Mode de livraison 
+			</ion-col>
+			<ion-col *ngIf="hasConfirmLivraisonMode==true" col-1 style="font-weight:bold; margin-top:2px; " >
+				<ion-icon name="checkmark" style="color:green"></ion-icon>
+			</ion-col>
+			
+			<ion-col *ngIf="!hasConfirmLivraisonMode" col-1 style="font-weight:bold; margin-top:2px; " >
+				<ion-icon name="checkmark" style="color:#d9d9d9"></ion-icon>
+			</ion-col>
+			<ion-col col-12 *ngIf="hasConfirmAdress && !hasConfirmLivraisonMode">
+				<ion-list radio-group [(ngModel)]="livraisonType" >
+
+				  <ion-item>
+					<ion-label text-wrap> <span style="font-weight:bold;">Livraison à domicile:</span><br/>
+						<p *ngIf="canHomeShipping" style="color:black;font-weight:bold;"> <span> Adresse: {{adresseLivraison.region}}</span>-
+						<span> {{adresseLivraison.town}}</span>- <span> {{adresseLivraison.adresse}}</span> 
+							<br/> Delai: 24h au plus tard après la validation de votre commande
+					    </p>
+						<p *ngIf="canHomeShipping" style="font-weight:bold;">
+					      Vous serez contacter apres la validation de votre commande pour plus de details  sur les modalités de la livraison
+					    </p>
+					    <p *ngIf="!canHomeShipping" style="color:black;font-weight:bold; color: black;"> Livraison à domicile ne sont pas encore possible à votre adresse, Choissez un point de relais.
+					    </p>
+					</ion-label>
+					<ion-radio value="domicile" [disabled]="!canHomeShipping" ></ion-radio>
+				  </ion-item>
+
+				  <ion-item>
+					<ion-label text-wrap style="font-weight:bold;">  Livraison au point de relais 
+						<p *ngIf="hasRelais" style="color:black;font-weight:bold; color: black;">
+						 <span *ngIf="hasRelais"> Point relais :{{relais.nom}}  </span><br/>
+						 <span *ngIf="hasRelais">Montant:{{relais.montant | currency:' ':'symbol':'1.0-0'}}  FCFA </span><br/>
+					  		Delai: {{delaiRelais}} heures au plus tard après la validation de votre commande 
+					    </p>
+						
+						<p style="font-weight:none;">Vous serez contacter apres la validation <br/> de votre commande pour plus de details <br/> sur les modalités de la livraison</p>
+					</ion-label>
+					<ion-radio value="relais" ></ion-radio>
+				  </ion-item>
+				</ion-list>
+
+				<ion-row >
+					<ion-col col-6  style="font-size:10px;" *ngIf=" livraisonType=='relais' && hasRelais ">
+						<button ion-button  color="costom-orange" style="color:white; font-size:10px;" (click)="hasConfirmLivraisonMode=true;validateLivraisonMode()"> <span style="font-size:11px;">Valider et continuer </span>
+						</button>
+					</ion-col>
+					<ion-col col-6  style="font-size:10px;" *ngIf=" livraisonType=='domicile' ">
+						<button ion-button  color="costom-orange" style="color:white; font-size:10px;" (click)="hasConfirmLivraisonMode=true;validateLivraisonMode()"> <span style="font-size:11px;">Valider et continuer </span>
+						</button>
+					</ion-col>
+					<ion-col col-6  style="font-size:10px;" *ngIf=" livraisonType=='relais' && !hasRelais ">
+						<button text-wrap ion-button  color="costom-orange" style="color:white; font-size:10px;" (click)="showRelaisModal()"> <span style="font-size:11px;">Choisir un point de relais  </span>
+						</button>
+					</ion-col>
+					<ion-col col-6  style="font-size:10px;" *ngIf=" livraisonType=='relais' && hasRelais ">
+						<button text-wrap ion-button  color="costom-orange" style="color:white; font-size:10px;" (click)="showRelaisModal()"> <span style="font-size:11px;">changer votre point de relais  </span></button>
+					</ion-col>
+				</ion-row>
+			</ion-col>
+			<ion-col style="text-align:center;" *ngIf="hasConfirmAdress && hasConfirmLivraisonMode">
+			    <ion-row style="margin-top:-10px;">
+					<ion-col offset-7  style="font-size:11px; color:#416998">
+						<ion-icon (click)="hasConfirmCommand=false;hasConfirmLivraisonMode=false"  name="md-create"><span style="font-size:11px; color:#416998">Modifier le mode de livraison</span></ion-icon>
+					</ion-col>
+				</ion-row>
+				<ion-row style="margin-top:-5px;">
+					
+					<ion-col *ngIf="livraisonType=='domicile'">
+						<span style="font-weight: bold;"> Livrason à domicile:</span>
+						<span>{{adresseLivraison.tel1}}</span> <span> {{adresseLivraison.tel2}}</span>-<span> {{adresseLivraison.region}}</span>-
+						<span> {{adresseLivraison.town}}</span>- <span> {{adresseLivraison.adresse}}</span> 
+					</ion-col>
+
+					<ion-col text-wrap *ngIf="livraisonType=='relais'">
+					    <span style="font-weight: bold;">Livraison au point de relais:</span>
+						<span style="color:black;font-weight:none;"> {{relais.nom}} - {{relais.quartier}} - {{relais.emplacement}} - {{relais.montant | currency:' ':'symbol':'1.0-0'}} FCFA
+						</span> 
+					</ion-col>
+
+				</ion-row>
+			</ion-col>
+		</ion-row>
+	
+		<ion-row style="border-bottom: 1px solid gray;"  style="background-color:white;">
+			
+			<ion-col col-2>
+				<div id="circle">
+					<div> 4 </div>
+				</div>
+			</ion-col>
+				
+			<ion-col col-9 style="font-weight:bold; margin-top:5px; " >Resumé de la commande
+			</ion-col>
+			
+			<ion-col *ngIf="hasConfirmCommand==true" col-1 style="font-weight:bold; margin-top:2px; " >
+				<ion-icon name="checkmark" style="color:green"></ion-icon>
+			</ion-col>
+			
+			<ion-col *ngIf="!hasConfirmCommand" col-1 style="font-weight:bold; margin-top:2px; " >
+				<ion-icon name="checkmark" style="color:#d9d9d9"></ion-icon>
+			</ion-col>
+				
+			<ion-col col-12 style="text-align:left;" *ngIf="hasConfirmLivraisonMode">
+				<ion-row>
+					<ion-col col-12 *ngIf="!hasConfirmCommand">
+						<ion-row  style="border-bottom: 1px solid gray;" *ngFor="let item of arrayPanier;let i = index">
+							<ion-col col-2 *ngIf="item.number<=item.product.quantity">
+								<p  style="text-align:center"> 
+								<img src="" [src]="baseUrl+'image/'+item.product.idImage" style="height:60px;"/></p>
+							</ion-col >
+							<ion-col col-9 *ngIf="item.number<=item.product.quantity">
+								<p style="color:gray;font-size:12px;">{{item.product.marque.name}}</p>
+								<p  style="margin-top:-10px;font-size:14px;">{{item.product.name}}</p>
+								<p style="margin-top:-10px;font-size:12px;" *ngIf="!item.product.retailSale.isInPromotion"> 
+									<span>{{item.number}} x {{item.product.retailSale.price}} FCFA = {{item.number* item.product.retailSale.price | currency:' ':'symbol':'1.0-0'}} FCFA</span> 
+								</p>
+								<p style="margin-top:-10px;font-size:12px;" *ngIf="item.product.retailSale.isInPromotion">
+									<span>{{item.number}} x {{item.product.retailSale.promotionalPrice}} FCFA</span>
+									<sub style="text-decoration: line-through; font-size: 12px;" > {{item.product.retailSale.price | currency:' ':'symbol':'1.0-0'}} FCFA</sub >
+									= {{item.number * item.product.retailSale.promotionalPrice | currency:' ':'symbol':'1.0-0'}}FCFA
+								</p>
+							</ion-col>
+						</ion-row>
+		
+						<ion-row  style="font-weight:bold; margin-top:0px;">
+							<ion-col  col-6 style="text-align:center;">	
+									SOUS-TOTAL :
+							</ion-col>
+							<ion-col center  col-6 style="text-align:center;">
+								 {{prixTotal | currency:' ':'symbol':'1.0-0'}} FCFA
+							</ion-col>
+							
+							<ion-col  col-6 style="text-align:center;">	
+									LIVRAISON :
+							</ion-col>
+							<ion-col center  col-6 style="text-align:center; font-weight: none;">
+								 {{montantLivraison | currency:' ':'symbol':'1.0-0'}} FCFA
+							</ion-col>
+							
+							<ion-col center  col-12 style="text-align:center;">
+								<ion-row>
+									<ion-col col-10>
+										<ion-item>
+											<ion-input placeholder="Entrer le numero votre coupon"> </ion-input>
+										</ion-item>
+									</ion-col>
+									<ion-col col-2>
+										<button color="costom-orange" ion-button style=""> Ok</button>
+									</ion-col>
+								</ion-row>
+							</ion-col>
+							<ion-col col-12> 
+								<ion-row style="border-top:1px solid white;color:black;font-size:16px;">
+									<ion-col  col-5 style="text-align:center;">
+											TOTAL: {{prixTotal + montantLivraison | currency:' ':'symbol':'1.0-0'}} FCFA
+									</ion-col>
+									<ion-col center  col-7 style="text-align:center;">
+										<button color="costom-orange" ion-button  style=";color:white; font-size:10px;" (click)="hasConfirmCommand=true"> <span style="font-size:11px;">Enregistrer et Continuer</span></button>
+									</ion-col>
+								</ion-row>
+							</ion-col>
+						</ion-row>	
+					</ion-col>
+					<ion-col *ngIf="hasConfirmCommand">
+						<ion-row style="margin-top:-10px;">
+							<ion-col offset-7  style="font-size:11px; color:#416998">
+								<ion-icon (click)="hasConfirmCommand=false"  name="md-eye"><span style="font-size:11px;color:#416998;"> voir la commande</span></ion-icon>
+							</ion-col>
+						</ion-row>
+						<ion-row>
+							<ion-col col-6> 
+							 {{nombreTotal}} produits
+							</ion-col>
+							<ion-col col-6>
+							 Total: {{prixTotal + montantLivraison | currency:' ':'symbol':'1.0-0'}} FCFA
+							</ion-col>
+						</ion-row>
+					</ion-col>
+				</ion-row>
+			</ion-col>
+		</ion-row>	
+		
+		<ion-row style="border-bottom: 1px solid gray;"  style="background-color:white;">
+		
+			<ion-col col-2>
+				<div id="circle">
+					<div>5</div>
+				</div>
+			</ion-col>
+			
+			<ion-col col-9 style="font-weight:bold; margin-top:5px; " >Paiement 
+			</ion-col>
+			
+			<ion-col *ngIf="hasPaided==true" col-1 style="font-weight:bold; margin-top:2px; " >
+				<ion-icon name="checkmark" style="color:green"></ion-icon>
+			</ion-col>
+			
+			<ion-col *ngIf="!hasPaided" col-1 style="font-weight:bold; margin-top:2px; " >
+				<ion-icon name="checkmark" style="color:#d9d9d9"></ion-icon>
+			</ion-col>
+			<ion-col col-12 *ngIf="hasConfirmCommand">
+				<ion-list radio-group [(ngModel)]="paiementType">
+					  <ion-item text-wrap>
+						<ion-label text-wrap style="font-weight:bold;"> Paiement a la livraison:<br/>
+							<p> Regler votre facture à la livraison; soit  en espèce du montant exact de votre
+							commande ou en effectuant un transfert MTN Mobile Money ou Orange Money du montant exact de la commande
+							au numéro qui vos sera indiqué par le livreur lors de la livraison.
+							</p>
+						</ion-label> 
+						<ion-radio value="livraison" checked="true" [disabled]="livraisonType=='relais'"></ion-radio>
+					  </ion-item>
+
+					  <ion-item text-wrap>
+						<ion-label text-wrap style="font-weight:bold;">Orange money/MTN Mobile Money/Express union/ Dohone / Yup
+						</ion-label>
+						<ion-radio value="mobile" ></ion-radio>
+					  </ion-item>
+				</ion-list>
+				<ion-col col-12 style="text-align:center;">
+					<button ion-button color="costom-orange" style="color:white; font-size:10px;" (click)="sendCommand()"> 	
+						<span style="font-size:11px;">Valider votre commande</span>
+					</button>
+				</ion-col>
+			</ion-col>
+		</ion-row>	
+	</div>
+</ion-content>

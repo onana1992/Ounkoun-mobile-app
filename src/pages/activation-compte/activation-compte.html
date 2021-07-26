@@ -1,0 +1,40 @@
+<ion-header>
+<ion-navbar color="header-color">
+    <ion-title><span style=" font-size:16px;">Activation du compte</span></ion-title>
+	<ion-buttons right>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+	<div *ngIf="isLoading">
+		<ion-row >
+			<ion-col style="text-align:center; text-color:gray;margin-top:30px;">
+			<img src="assets/imgs/loading.gif" height="80%" width="80%">
+			</ion-col>
+		</ion-row>
+	</div>
+	<div *ngIf="!isLoading">
+		<ion-row>
+			<ion-col col-12 style="text-align:center;">
+				<h5 style="color:gray;">valider votre inscription  en entrant le code recu par email/sms</h5>
+			</ion-col>
+			<ion-col col-12 style="text-align:center;">
+				Vous disposer de <span style="font-weight:bold;">{{counter}}</span> secondes pour activer votre compte 
+			</ion-col>
+		</ion-row>
+		<ion-row *ngIf="isIncorrectCode" style="margin-top:-20px;">
+			<ion-col col-12>
+				<p style="color:red;text-align:center; font-size:14px;"> Votre code ne correspond pas, verifier le et ressayer a nouveau</p>
+			</ion-col>
+		</ion-row>
+		<ion-list>
+			<ion-item>
+				<ion-label  floating>Votre code secret</ion-label>
+				<ion-input [(ngModel)]="code"></ion-input>
+			</ion-item>
+		</ion-list>
+		<ion-row> <button ion-button block color="costom-orange" (click)="activate()" >Activer votre compte </button> </ion-row><br/>
+	</div>
+</ion-content>

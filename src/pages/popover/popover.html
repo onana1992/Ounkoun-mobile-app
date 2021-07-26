@@ -1,0 +1,31 @@
+<ion-list> 
+<!-- <ion-list-header color="primary">Aide</ion-list-header>  -->
+ <button ion-item *ngIf="isConnected" (click)="disconnect()" >
+ 	<ion-icon name="ios-power-outline" item-start></ion-icon>
+ 	Se deconnecter
+</button>
+
+<button ion-item *ngIf="!isConnected" (click)="connect()" >
+	<ion-icon name="ios-power-outline" item-start></ion-icon>
+ 	Se connecter
+</button>
+
+ <button ion-item *ngIf="!isConnected" (click)="register()" >
+ 	<ion-icon name="ios-contact-outline" item-start></ion-icon>
+ 	S'inscrire
+</button>
+
+ <button ion-item *ngIf="isConnected" (click)="goTogoCommand()" >
+ 	<ion-icon name="ios-basket-outline" item-start></ion-icon>
+ 	Mes commandes
+</button>
+
+<button ion-item *ngIf="isConnected" (click)="goTogoEnchere()" >
+ 	<ion-icon name="ios-hammer-outline" item-start >
+ 	</ion-icon>
+ 	Mes enchères
+</button>
+
+</ion-list>
+
+

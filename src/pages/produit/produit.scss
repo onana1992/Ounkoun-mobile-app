@@ -1,0 +1,29 @@
+page-produit {
+
+	.active{
+		border-bottom:2px solid orange;
+	}
+	
+	.info-favori , .info-panier{
+	background-color:gray;
+	color:white;
+	position:fixed;
+	top:60px;
+	z-index:9999;
+	font-size:14px;
+	margin-top:10px;
+	text-align: center;
+	width:95%;
+	margin-left:3%;
+   }
+   
+   .light{
+	color:#EE7600;
+	}
+	
+	.no-light{
+	color:gray;
+	}
+	
+
+}

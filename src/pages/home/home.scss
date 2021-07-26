@@ -1,0 +1,51 @@
+page-home {
+
+	ion-input{
+		border-color:orange;
+	}
+
+	.home{
+		margin-top:60px;
+	}
+	
+	ion-navbar{
+	height:55px;
+	}
+	
+	 .cat ion-col ion-col{
+	  font-size:10px;
+	 }
+ 
+	 ion-header{
+		margin-top:0px;
+	 }
+	 
+	ion-slides{
+		height:150px;
+		padding-top:0px;
+		margin-top:0px;
+		width:100%;
+	}
+	
+	.active{
+		border-bottom:2px solid orange;
+	}
+	
+	.epuise{
+	  color: #dfdfdf;
+	}
+	
+	#circle{ background: #416998; width: 60px; height: 60px; border-radius: 64px; border: 2px solid #416998;}
+	#circle div { position:relative; left: 2px; top: 8px; width: 50px; height: 50px; color: white; text-align:center;font-size:30px; }
+	
+	
+	#test_class {
+		position:absolute;
+		width: 100%;
+		top: 66px;
+     }
+
+
+
+}
+

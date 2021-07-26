@@ -1,0 +1,145 @@
+<ion-header>
+  <ion-navbar color="header-color">
+    <ion-title style="font-size:14px;">Panier</ion-title>
+	<ion-buttons right>
+      <button ion-button icon-only (click)="goTorecheche()" ><ion-icon name="search" ></ion-icon></button>
+	  <button ion-button icon-only (click)="openFavoris()" ><span style="font-size:16px;"><ion-icon name="heart"></ion-icon></span><sup style="margin-left:-9px;margin-top:-7px;"><span style="background-color:orange; min-height:5px; min-width:5px; border-radius:60%;padding:5px; font-size:7px;" > <span style="position:relative;top:1px;font-size:8px;">{{favorisSize}}</span></span > </sup> 
+	  </button>
+	  <button ion-button icon-only ><span style="font-size:16px;"><ion-icon name="cart" ></ion-icon></span><sup style="margin-left:-9px;margin-top:-7px;"><span style="background-color:orange; min-height:5px; min-width:5px; border-radius:60%;padding:5px; font-size:7px;" > <span style="position:relative;top:1px;font-size:8px;">{{panierSize}}</span></span > </sup></button>
+	  <button ion-button icon-only (tap)=" presentPopover($event)" ><ion-icon name="more"></ion-icon>
+	  </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+
+	<ion-row *ngIf="isLoading">
+		<ion-col style="text-align:center;margin-top:30px;">
+			Suppression de l'article,veuillez patienter ...
+			<img src="assets/imgs/loading.gif" height="80%" width="80%">
+		</ion-col>
+	</ion-row>
+
+	<ion-row *ngIf="panierVide">
+		<ion-col style="text-align:center; text-color:gray;margin-top:30px;">
+					Votre panier est vide, veuillez poursuivre vos achat et ajouter des produits
+		</ion-col>
+	</ion-row>
+
+	<ion-row *ngIf="isLoadingDelete">
+		<ion-col style="text-align:center;margin-top:30px;">
+					Suppression de l'article,veuillez patienter ...
+					<ion-col style="text-align:center; text-color:gray;margin-top:30px;">
+						<img src="assets/imgs/loading.gif" height="80%" width="80%">
+					</ion-col>
+		</ion-col>
+	</ion-row>
+	
+	<ion-row *ngIf="!isLoading && !isLoadingDelete && !panierVide">
+		<ion-col col-12>
+			<ion-row  style="border-bottom: 1px solid gray;" *ngFor="let item of arrayPanier;let i = index">
+				<ion-col col-2>
+					<p  style="text-align:center"> 
+							<img src="" [src]="baseUrl+'image/'+item.product.idImage" style="height:60px;"/>
+					</p>
+				</ion-col >
+						<ion-col col-9>
+							<p style="color:gray;font-size:12px;">{{item.product.marque.name}}</p>
+							<p  style="margin-top:-10px;font-size:14px;">{{item.product.name}}</p>
+							<p style="margin-top:-10px;font-size:12px;" *ngIf="!item.product.retailSale.isInPromotion"> 
+								<span>{{item.product.retailSale.price}} FCFA</span> 
+							</p>
+							<p style="margin-top:-10px;font-size:14px; font-weight: bold;" *ngIf="item.product.retailSale.isInPromotion">
+								<span> {{item.product.retailSale.promotionalPrice | currency:' ':'symbol':'1.0-0'}} FCFA</span>
+								<sub style="text-decoration: line-through; font-size: 12px;font-weight: bold;" > {{item.product.retailSale.price | currency:' ':'symbol':'1.0-0'}} FCFA</sub >
+							</p>
+							<p *ngIf="item.product.quantity==0" style="color:red; margin-bottom:-5px; margin-top:-5px; padding-bottom=0px; padding-top:0px;"> Epuisé en stock</p>
+							<ion-row>
+								<ion-col center col-12 style="text-align:center;">
+								<ion-item no-lines>
+								<ion-label>Choisir la quantité:</ion-label>
+								<ion-select [(ngModel)]="item.number"  (ngModelChange)="changeNumber($event,item.product.id)">
+									<ion-option *ngFor="let val of arraySize[i]" value="{{val}}" [selected]="val==item.number" >{{val}}</ion-option>
+								</ion-select>
+								</ion-item>
+								</ion-col>
+							</ion-row>
+							<ion-row *ngIf="item.number> arraySize[i].length">
+								<ion-col style="color:red; font-size:12px; margin-top: -10px;">
+									quantité indisponible, choisir une quantité disponible
+								</ion-col>
+							</ion-row>
+						</ion-col>
+						
+						<ion-col col-1 >
+							<ion-icon name="ios-trash-outline" (click)="confirmDelete(item.product,$event)" > </ion-icon>
+						</ion-col >
+				
+						<ion-col col-12 > 
+							<ion-row style="font-weight:bold;border:1px solid gray;" [ngClass]="{epuise: item.product.quantity==0 || item.number> arraySize[i].length }">
+								<ion-col  col-6 style="text:center;">
+										SOUS-TOTAL: 
+								</ion-col>
+								<ion-col center  col-6 style="text-align:center; font-size: 14px; font-weight: bold;">
+									<span *ngIf="!item.product.retailSale.isInPromotion">
+										{{item.product.retailSale.price * item.number | currency:' ':'symbol':'1.0-0' }} FCFA
+									</span>
+									<span *ngIf="item.product.retailSale.isInPromotion" style="font-size:14px;">
+										{{item.product.retailSale.promotionalPrice * item.number | currency:' ':'symbol':'1.0-0' }} FCFA
+									</span>
+								</ion-col>
+							</ion-row>
+						</ion-col>
+					</ion-row>
+	
+					<ion-row  style="font-weight:bold; margin-top:0px;">
+						<ion-col  col-6 style="text-align:center;">
+							TOTAL : 			 
+						</ion-col>
+						<ion-col center  col-6 style="text-align:center;">
+										{{prixTotal | currency:' ':'symbol':'1.0-0'}} FCFA
+						</ion-col>
+						
+						<ion-col center  col-12 style="text-align:center;">
+							<ion-row>
+								<ion-col col-10>
+									<ion-item>
+										<ion-input placeholder="Entrer le numero votre coupon"> </ion-input>
+									</ion-item>
+								</ion-col>
+								<ion-col col-2>
+									<button color="costom-orange" ion-button>Ok</button>
+								</ion-col>
+							</ion-row>
+
+							
+						</ion-col>
+						<ion-col col-12> 
+						
+							<ion-row style="border-top:1px solid white;color:black;font-size:16px;">
+								<ion-col  col-6 style="text-align:center;">
+										TOTAL: 
+								</ion-col>
+								<ion-col center  col-6 style="text-align:center;">
+										{{prixTotal| currency:' ':'symbol':'1.0-0'}} FCFA
+								</ion-col>
+							</ion-row>
+						</ion-col>
+						<ion-col center  col-12 style="text-align:center;margin-top:-10px; ">
+							<p>
+								<button ion-button block color="costom-orange" style="color:white;" (click)="openCommande()"> Valider votre commande </button>
+							</p>
+						</ion-col>
+						<ion-col center  col-12 style="text-align:center;margin-top:-20px; margin-bottom:40px;">
+							<p>
+								<button text-wrap ion-button block  style="background-color: #25D366; color:white;" (click)="sendByWhatsApp()"> <ion-icon name="logo-whatsapp" style="margin-right: 3px; font-size: 25px;color: black;" ></ion-icon> Passer votre commande via Whattsapp 
+								</button>
+							</p>
+						</ion-col>			
+					</ion-row>	
+			    </ion-col> 
+	</ion-row>		
+	
+</ion-content>

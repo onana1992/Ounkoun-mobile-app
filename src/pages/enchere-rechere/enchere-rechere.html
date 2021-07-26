@@ -1,0 +1,214 @@
+<ion-header>
+
+<ion-navbar text-wrap color="header-color">
+    <ion-title text-wrap><span style=" font-size:16px; color:orange">Enchère - Recherche  </span>
+    </ion-title>
+ </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+	<ion-row style="margin-top: -20px;" >
+			<ion-col col-12 style="margin-top: 20px;background-color: #F3F0F0;">
+				<ion-row  >
+					<ion-col col-12 style="border-bottom: 1px solid gray; text-align:center; ">
+					Recherche par numero de l'enchère
+					</ion-col> 
+				</ion-row>
+				<ion-row >
+					<form novalidate #form="ngForm" (ngSubmit)="search(form)">
+						<ion-row>
+							<ion-col col-12>
+								<ion-item>
+									<ion-input 
+									placeholder="Entrer le numero de l'enchere"
+									id="search1"
+									name="search1"
+									required 
+									[(ngModel)]="numEnchere" 
+									#search1="ngModel"> 
+									</ion-input>
+								</ion-item>
+								<ion-row *ngIf="search1.invalid && search1.dirty">
+									<ion-col *ngIf="search1.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+											valeur requise
+									</ion-col>			
+								</ion-row>
+							</ion-col>
+
+							<ion-col col-12>
+								<button full  color="costom-orange" ion-button>Rechercher</button>
+							</ion-col>
+						</ion-row>
+					</form>
+				</ion-row>
+			</ion-col>
+			<ion-col col-12 style="border: 1px solid #F3F0F0; border-top:none; min-height: 80px;">
+				<ion-row *ngIf="isLoading1" style="margin-top: 20px;">
+					<ion-col style="text-align:center;">
+						Recherche de l'enchere, veuillez patienter ...
+						<img src="assets/imgs/loading.gif" height="60%" width="60%">
+					</ion-col>
+				</ion-row>
+				<p *ngIf="!isLoading1 && produit == undefined " style="text-align: center;color:#F3F0F0;">
+					Aucun resultat
+				</p>
+				<ion-row *ngIf="!isLoading1 && produit != undefined" >
+					<ion-item text-wrap (click)="gotoProduct(produit.numEnchere)" >
+						<ion-row>
+							<ion-col col-4>
+								<img style="height:160px;"  [src]="baseUrl+'image/'+produit.idImage" /> 
+							</ion-col>
+
+							<ion-col col-8 padding>
+							
+								<p style="padding-top:0px;color:gray;font-size:12px;"> Enchere N°{{produit.numEnchere}}</p>
+
+								<p  style="margin-top:-2px;font-size:16px;color:black; margin-bottom: 3px;"> {{produit.name | limitTo:80}}
+								</p>
+
+								<p style="margin-top:0px; font-size:12px; color:black;" >
+									<span style="color:gray;"> Etat de l'article:</span> <span>{{produit.etat}} 
+									</span>
+								</p>
+
+								<p style="margin-top:0px; font-size:12px; color:black;" >
+									<span style="color:gray;"> Mise à prix :</span> <span>{{produit.initPrice | currency:' ':'symbol':'1.0-0'}} FCFA
+									</span>
+								</p>
+
+								<p style="margin-top:0px; font-size:12px; color:black;">
+									<span style="color:gray;" > Nombres d'enchères :</span><span> {{produit.historique.length}} </span>
+						
+								</p>
+
+
+								<p style="margin-top:0px; font-size:12px; color:black;">
+									<span  style=" color:gray;"> Vente se terminant </span> 
+									<span> le {{produit.closeDate.date | date:'d MMM  y, h:mm'}} </span>
+								</p>
+
+						
+								<p style="text-align:center;margin-top:10px;">
+									<button  color="costom-orange" ion-button round (click)="gotoProduct1(produit.numEnchere,$event)" ><span style=" font-size:10px;">Encherir</span></button>
+								</p>
+							</ion-col>
+						</ion-row>
+					</ion-item>
+				</ion-row>
+			</ion-col>
+	</ion-row>	
+
+    <ion-row style="margin-top: -20px;">	
+		<ion-col col-12 style="margin-top: 40px; background-color: #F3F0F0;">
+			<ion-row >
+				<ion-col col-12 style="border-bottom: 1px solid gray; text-align:center; ">
+					Recherche par nom de produits
+				</ion-col> 
+			</ion-row>
+			<ion-row >
+				<ion-col col-12>
+					<ion-item>
+						<ion-input #input clearInput="true" color="orange"  
+							placeholder="recherche un produit" 
+							style="border-color:red;"
+							[(ngModel)]="text" 
+							#item (keyup)="searchText(item.value,'1')">
+						</ion-input>
+					</ion-item>
+				</ion-col>
+			</ion-row>
+		</ion-col>
+		<ion-col *ngIf="encheres.length==0" col-12 style="border: 1px solid #F3F0F0; border-top:none; min-height: 80px;">
+			<p style="text-align: center; color:#F3F0F0; margin-top: ;">Aucun resultat
+			</p>
+		</ion-col>
+		<ion-col *ngIf="encheres.length!=0" col-12 style="border: 1px solid #F3F0F0; border-top:none; min-height: 80px;">
+			<ion-row *ngFor="let produit of encheres">
+				<ion-item text-wrap (click)="gotoProduct(produit.numEnchere)" >
+					<ion-row>
+						<ion-col col-4>
+							<img style="height:160px;"  [src]="baseUrl+'image/'+produit.idImage" /> 
+						</ion-col>
+
+						<ion-col col-8 padding>
+						
+							<p style="padding-top:0px;color:gray;font-size:12px;"> Enchere N°{{produit.numEnchere}}</p>
+
+							<p  style="margin-top:-2px;font-size:16px;color:black; margin-bottom: 3px;"> {{produit.name | limitTo:80}}
+							</p>
+
+							<p style="margin-top:0px; font-size:12px; color:black;" >
+								<span style="color:gray;"> Etat de l'article:</span> <span>{{produit.etat}} 
+								</span>
+							</p>
+
+							<p style="margin-top:0px; font-size:12px; color:black;" >
+								<span style="color:gray;"> Mise à prix :</span> <span>{{produit.initPrice | currency:' ':'symbol':'1.0-0'}} FCFA
+								</span>
+							</p>
+
+							<p style="margin-top:0px; font-size:12px; color:black;">
+								<span style="color:gray;" > Nombres d'enchères :</span><span> {{produit.historique.length}} </span>
+					
+							</p>
+
+
+							<p style="margin-top:0px; font-size:12px; color:black;">
+								<span  style=" color:gray;"> Vente se terminant </span> 
+								<span> le {{produit.closeDate.date | date:'d MMM  y, h:mm'}} </span>
+							</p>
+
+					
+							<p style="text-align:center;margin-top:10px;">
+								<button  color="costom-orange" ion-button round (click)="gotoProduct1(produit.numEnchere,$event)" ><span style=" font-size:10px;">Encherir</span></button>
+							</p>
+						</ion-col>
+					</ion-row>
+				</ion-item>
+			</ion-row> 
+
+			<ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="page < totalPage ">
+    			<ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="chargement de plus de donneé..."></ion-infinite-scroll-content>
+  			</ion-infinite-scroll>
+		</ion-col>
+	</ion-row>
+
+	<!-- <ion-row padding style="margin-top: -20px;" >
+			<ion-col col-12 style="background-color: #F3F0F0;">
+				<ion-row  >
+					<ion-col col-12 style="border-bottom: 1px solid gray; text-align:center; ">
+						<form novalidate #form="ngForm" (ngSubmit)="encherir(form)">
+						<ion-row>
+							<ion-col col-8>
+								<ion-item>
+									<ion-input 
+									type="number"
+									pattern="\\d*"
+									placeholder="Entrer votre enchere"
+									id="prix"
+									name="prix"
+									required 
+									[(ngModel)]="enchere.prix" 
+									#prix="ngModel"> 
+									</ion-input>
+								</ion-item>
+								<ion-row *ngIf="prix.invalid && (prix.dirty || registrationFormSubmitted )">
+									<ion-col *ngIf="prix.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+											valeur requise
+									</ion-col>			
+								</ion-row>
+							</ion-col>
+
+							<ion-col col-4>
+								<button  color="costom-orange" ion-button>Rechercher</button>
+							</ion-col>
+						</ion-row>
+					</form>
+				    </ion-col> 
+				</ion-row>
+			</ion-col>
+	</ion-row>
+ -->
+		
+
+</ion-content>

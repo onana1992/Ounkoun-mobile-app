@@ -1,0 +1,73 @@
+<ion-header>
+
+  <ion-navbar color="header-color">
+    <ion-title><span style=" font-size:16px;">Mes favoris</span></ion-title>
+	<ion-buttons right>
+      <button ion-button icon-only (click)="goTorecheche()" ><ion-icon name="search" ></ion-icon></button>
+	  <button ion-button icon-only (click)="openPanier()"><span style="font-size:16px;"><ion-icon name="cart" ></ion-icon></span><sup style="margin-left:-9px;margin-top:-7px;"><span style="background-color:orange; min-height:5px; min-width:5px; border-radius:60%;padding:5px; font-size:7px;" > <span style="position:relative;top:1px;font-size:8px;">{{panierSize}}</span></span > </sup></button>
+	  <button ion-button icon-only (tap)=" presentPopover($event)" ><ion-icon name="more"></ion-icon></button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+<div style="text-align:center;" *ngIf="showMessageAjoutPanier">
+	<ion-row  class="info-panier">
+		<ion-col col-12 >
+				Le produit a été ajouté avec succès dans votre panier
+		</ion-col>
+		<ion-col col-12 style="text-align:center;margin-top:-10px;font-size:10px;">
+				<button ion-button round color="costom-orange" (click)="openPanier()" ><span  style="text-align:center;margin-top:0px;font-size:10px;">voir votre panier</span></button>
+		</ion-col>
+	</ion-row>
+</div>
+
+<ion-content padding hide-fab>
+
+	<ion-fab bottom right>
+			<button   ion-fab (click)="scrollToTop()" style="background-color:gray;" > <ion-icon name="md-arrow-up"></ion-icon></button>
+	</ion-fab>
+	
+	<div *ngIf="isLoading">
+		<ion-row >
+			<ion-col style="text-align:center; margin-top:20px;">
+				Chargement des produits, veuillez patienter ...
+				<img src="assets/imgs/loading.gif" height="80%" width="80%">
+			</ion-col>
+		</ion-row>
+	</div>
+
+	<div  *ngIf="!isLoading && favorisVide">
+		<ion-row >
+			<ion-col style="text-align:center; margin-top:20px;color: gray;">
+				Vous n'avez pas de produits dans vos favoris.
+			</ion-col>
+		</ion-row>
+	</div>
+	
+	<div class="model3" *ngIf="!isLoading && !favorisVide">
+		<div *ngFor="let favori of favorites">
+			<ion-row  (click)="gotoProduct(favori.product.name)">
+				<ion-col col-4>
+					<p  style="text-align:center"> 
+					<img  [src]="baseUrl+'image/'+favori.product.idImage"  
+					/></p>
+				</ion-col >
+				<ion-col col-8>
+					<p style="padding-top:-30px;color:gray;font-size:12px;">{{favori.product.marque.name}}</p>
+					<p  style="margin-top:-10px;font-size:14px;">{{favori.product.name}}</p>
+					<p style="margin-top:-10px;font-size:12px; font-weight: bold;" *ngIf="!favori.product.retailSale.isInPromotion"> 
+							<span>{{favori.product.retailSale.price}} FCFA</span> 
+					</p>
+					<p style="margin-top:-10px;font-size:12px; font-weight: bold;" *ngIf="favori.product.retailSale.isInPromotion">
+							<span> {{favori.product.retailSale.promotionalPrice}} FCFA</span>
+							<sub style="text-decoration: line-through; font-size: 12px;" > {{favori.product.retailSale.price}} FCFA</sub >
+					</p>
+					<p (click)="confirmDelete(favori.product,$event)" style=" color:gray;margin-top:-5px;"><ion-icon name="ios-trash-outline" > </ion-icon> <span style="font-size:12px;"> retirer</span></p>
+					<p style="text-align:center;"><button [disabled]="favori.product.quantity==0" (click)="addPanier(favori.product,$event)" color="costom-orange" style="height:30px;" ion-button round><span style=" font-size:10px;">Acheter</span></button></p>
+				    <p style="color:red;text-align:center;" *ngIf="favori.product.quantity==0">Stock épuisé</p>
+				</ion-col>
+			</ion-row>
+		</div>
+	</div>
+</ion-content>

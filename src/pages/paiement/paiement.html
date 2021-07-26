@@ -1,0 +1,113 @@
+<ion-header>
+ <ion-navbar color="header-color">
+    <ion-title><span style=" font-size:16px;">Paiement</span></ion-title>
+	<ion-buttons right>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+	<div class="start" *ngIf="!next">
+		<ion-row>
+			<ion-col>
+				<h5 style="color:#EE7600;">Paiement orange money</h5>
+				<p style="font-weight: bold;">Composer le #150*44#  puis veillez entrer le code de paiement orange  reçu par sms ainsi votre numero
+				de teléphone  pour valide votre paiement </p> 
+			</ion-col>
+		</ion-row>
+	
+	
+		<form novalidate #form1="ngForm" (ngSubmit)="submitOrange(form1)" >
+			
+			<ion-list style="margin-top:-20px;">
+				
+				<ion-item>
+					<ion-label  floating>Numero de mobile*</ion-label>
+					<ion-input  id="numero"
+								name="numero"
+								required  
+								[(ngModel)]="paiement.numero" 
+								#numero="ngModel"
+								pattern="^6[0-9]{8}$">
+					</ion-input>
+				</ion-item>
+
+				<ion-row *ngIf="numero.invalid && (numero.dirty || registrationFormSubmitted)">
+					<ion-col *ngIf="numero.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+						valeur requise
+					</ion-col>
+					<ion-col *ngIf="numero.errors.pattern" style="font-size:10px;color:red;padding-left:15px;">
+						Entrer un numero de télephone valide
+					</ion-col>
+				</ion-row> 
+					
+				<ion-item>
+					<ion-label  floating>Code de paiement*</ion-label>
+					<ion-input  id="code"
+								name="code" 
+								required 
+								minlength="6"
+								maxlength="6" 
+								[(ngModel)]="paiement.code" 
+								#code="ngModel">
+					</ion-input>
+				</ion-item>
+
+				<ion-row *ngIf="code.invalid && ( code.dirty || registrationFormSubmitted)">
+					<ion-col *ngIf="code.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+						valeur requise
+					</ion-col>
+					<ion-col *ngIf="code.errors.minlength" style="font-size:10px;color:red;padding-left:15px;">
+						6 caractères  requis
+					</ion-col>
+				</ion-row> <br/>
+					
+			
+				<ion-row> 
+					<button ion-button block color="costom-orange"> Payer </button>
+				</ion-row>
+			</ion-list>
+		</form>	
+	</div>
+
+
+	<div class="cfmSMS" *ngIf="next">
+
+		<ion-row>
+			<ion-col>
+				<h5 style="color:#EE7600;">Confirmation du paiement</h5>
+				<p style="font-weight: bold;">vous avez reçu un code validation de 5 chiffre Dohone par sms, veuillez entrer ce code pour confirmer votre paiement</p> 
+			</ion-col>
+		</ion-row>
+		<form novalidate #form2="ngForm" (ngSubmit)="submitCode(form2)" >
+			
+			<ion-list style="margin-top:-20px;">	
+				<ion-item>
+					<ion-label  floating>Code de confirmation*</ion-label>
+					<ion-input  id="codeC"
+								name="codeC" 
+								required 
+								minlength="5"
+								maxlength="5" 
+								[(ngModel)]="confirmation.code" 
+								#codeC="ngModel">
+					</ion-input>
+				</ion-item>
+
+				<ion-row *ngIf="codeC.invalid && ( codeC.dirty || registrationFormSubmitted)">
+					<ion-col *ngIf="codeC.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+						valeur requise
+					</ion-col>
+					<ion-col *ngIf="codeC.errors.minlength" style="font-size:10px;color:red;padding-left:15px;">
+						5 caractères  requis
+					</ion-col>
+				</ion-row> <br/>
+					
+				<ion-row> 
+					<button ion-button block color="costom-orange"> confirmer votre paiement </button>
+				</ion-row>
+			</ion-list>
+		</form>	
+	</div>
+</ion-content>

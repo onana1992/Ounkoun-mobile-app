@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-navbar color="header-color">
+	  <ion-item color="header-color"  >
+		<ion-label > <ion-icon name="search" ></ion-icon></ion-label>
+		<ion-input #input clearInput="true" color="orange"  placeholder="recherche un produit" style="border-color:red;"
+		#item (keyup)="search(item.value)"></ion-input>
+	  </ion-item >
+  </ion-navbar> 
+</ion-header>
+
+
+<ion-content style="min-height: 400px;">
+    <ion-row style="border-bottom: 2px solid orange;" *ngIf="produits.length>0">
+			
+			<ion-col col-12 style="font-size:16px;">		
+					<ion-icon name="menu"></ion-icon> <span style="font-size:14px;margin-left:5px;font-weight:bold;margin-top:-3px;">Categories</span>
+			</ion-col >
+			
+			<button ion-item   *ngFor="let cat of searchCategories" (click)="gotoResultat(item.value,cat.name)">
+				<ion-row style="">
+						<ion-col text-wrap col-8 >
+							{{item.value}} <span style="margin-right:2px;">dans</span>	{{cat.name}}
+						</ion-col >
+						<ion-col col-4 style="text-align:right;">
+							{{cat.size}} produits
+						</ion-col >
+				</ion-row>	
+			</button >
+	</ion-row>
+
+	<ion-list style="">
+	    <div *ngFor="let produit of produits; let i = index">
+			<button text-wrap ion-item *ngIf="i<6" (click)="gotoProduct(produit.name)" >
+				<ion-row *ngIf="i<6">
+					<ion-col col-2 >
+						<p  style="text-align:center"> 
+							<img  [src]="baseUrl+'image/'+produit.idImage" style="height:60px;"/>
+						</p>
+					</ion-col >
+					<ion-col col-10 text-wrap>
+						<p style="padding-top:-30px;color:gray;font-size:12px;">{{produit.marque.name}}</p>
+						<p  style="margin-top:0px;font-size:14px;">{{produit.name}}</p>
+						<p style="margin-top:0px;font-size:12px;" *ngIf="produit.retailSale.isInPromotion">
+							<span style="font-size:14px; font-weight:bold;">{{produit.retailSale.promotionalPrice}} FCFA </span > <sub style="text-decoration: line-through; font-size: 12px;" >{{produit.retailSale.price| currency:' ':'symbol':'1.0-0'}}FCFA</sub >
+						</p>
+						<p style="margin-top:0px;font-size:12px;" *ngIf="!produit.retailSale.isInPromotion">
+							<span style="font-size:14px; font-weight:bold;">{{produit.retailSale.price| currency:' ':'symbol':'1.0-0'}} FCFA </span > 
+						</p>
+					</ion-col>
+				</ion-row>
+			</button>
+		</div>
+	</ion-list>
+	
+	<ion-row *ngIf="produits.length>0">
+		<ion-col col-12>
+			<button ion-button block color="costom-orange" (click)="gotoResultat(item.value,'null')" style="margin-top:20px;color:black;margin-bottom: 50px;"> Voir tous les resultats <br/> {{size}} produits </button>
+		</ion-col>
+	</ion-row>
+	<br/><br/><br/><br/><br/><br/><br/>
+	
+</ion-content>

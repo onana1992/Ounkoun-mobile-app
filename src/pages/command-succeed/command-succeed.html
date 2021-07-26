@@ -1,0 +1,122 @@
+<ion-header>
+ <ion-navbar color="header-color">
+    <ion-title><span style=" font-size:16px;">Commande enregistreée</span></ion-title>
+	<ion-buttons right>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+	<h4 style="color:#EE7600"> Merci {{prenom}} {{nom}} ! votre commande a  été enregistrée avec succès.
+    </h4>
+	
+	<ion-row >
+		<ion-col col-12 style="text-align:center; text-align:justify; font-weight:bold;">
+			Votre commande a bien été enregistrée.Nous vous remercions de la confiance que vous nous accordée.
+			Nous traitons promptement votre commande, vous serez contacter dans les instants à venir pour 
+			la confirmation de votre commande.
+		</ion-col><br/>
+    </ion-row>
+
+    <p style="font-weight:bold;">Vous pouvez choisir de payer votre facture dès maintenant ou alors plus tard. Les moyens de paiement disponible sont le suivants:</p>
+
+    <ion-row>        
+        <ion-col col-4 style="text-align:center;margin-bottom: 20px;" >
+            <img src="assets/imgs/orange-money.jpg" height="60%" width="60%">
+        </ion-col>
+
+        <ion-col col-4 style="text-align:center;margin-bottom: 20px;">
+            <img src="assets/imgs/MTN-Mobile-Money.png" height="60%" width="60%">
+         </ion-col> 
+
+        <ion-col col-4  style="text-align:center;margin-bottom: 20px;">
+            <img src="assets/imgs/logoeu.jpg" height="60%" width="60%">
+        </ion-col> 
+    </ion-row>
+
+    <ion-row>        
+        <ion-col col-4 style="text-align:center;margin-bottom: 20px;" >
+            <img src="assets/imgs/dohone-account.png" height="60%" width="60%">
+        </ion-col>
+
+        <ion-col col-4 style="text-align:center;margin-bottom: 20px;" >
+            <img src="assets/imgs/logo_yup_fond_blanc.png" height="100%" width="100%">
+        </ion-col>
+	</ion-row>
+
+  <form method="post" novalidate #form1="ngForm" action="https://www.my-dohone.com/dohone/pay"  name="someForm" >
+
+    <input type="hidden" name="cmd" value="start">
+    <!--Cette Valeur est à ne pas changer et elle est Obligatoire -->
+
+    <input type="hidden" name="rN" [(ngModel)]="rN">
+    <!--le nom de votre client qui effectue le paiement.c'est facultatif.  -->
+
+    <input type="hidden" name="rT"  [(ngModel)]="rT">
+
+    <!--Numéro Téléphone du client qui effectue le paiement (Obligatoire) -->
+
+    <!-- <input type="hidden" name="rE" value="onanajunior92@gmail.fr"> -->
+    <!--Adresse email du client qui effectue le paiement.c'est facultatif.-->
+
+    <input type="hidden" name="rH" value="ED155M321925">
+    <!--Votre Code-marchand que vous avez reçu par mail (Obligatoire) -->
+
+    <input type="hidden" name="rI" [(ngModel)]="rI">
+    <!--Le numéro de votre commande. Si votre système ne gère pas de numéro de commande, vous pouvez enlevez ce champs. c'est facultatif. -->
+
+    <input type="hidden" name="rMt"  [(ngModel)]="rMt">
+
+    <!-- <input type="hidden" name="rMt" value="300"> -->
+    
+    <!--Montant TOTAL des achats (Obligatoire). C’est le montant qui devra être payé par votre client. Par défaut la dévise de ce montant est l'euro, Sauf si vous précisez une autre devise sous le paramètre 'rDvs' ci-après. -->
+
+    <input type="hidden" name="rDvs" value="XAF">
+    <!--La devise correspondante au montant que vous avez donné. Ce paramètre est facultatif. Dans le cas où vous ne précisez pas ce paramètre, la devise est EUR. Vous avez le choix entre 3 devises uniquement : EUR, XAF, USD -->
+
+
+    <!-- <input type="hidden" name="rOnly" value="1, 2, 3"> --> 
+
+    <!--Ceci est optionnel. Si vous souhaitez que votre API n’affiche que certains opérateurs, vous pouvez préciser ces opérateurs ici. 1=MTN, 2=Orange, 3=Express Union, 5=Visa via UBA, 10=Dohone, 14= Visa via Wari, 15=Wari card, 16=VISA/MASTERCARD, 17=YUP. -->
+
+    <input type="hidden" name="rLocale" value="fr">
+    <!--le choix de la langue. fr ou en-->
+
+    <input type="hidden" name="source" value="ounkoun"> 
+    <!--Le nom commercial de votre site (Obligatoire) -->
+
+    <input type="hidden" name="endPage" value="http://www.ounkoun.com">
+    <!--Adresse de redirection en cas de SUCCESS de paiement (Obligatoire) -->
+
+    <input type="hidden" name="notifyPage" value="https://node16375-ounkoun1.hidora.com/backend/web/app_dev.php/paiement">
+    <!--Adresse de notification automatique de votre site en cas de succès de paiement-->
+
+    <input type="hidden" name="cancelPage" value="http://www.ounkoun.com">
+    <!--Adresse de redirection en cas de Annulation de paiement par le client -->
+
+    <!-- <input type="hidden"name="logo"value="http://www.ounkoun.com/votre-logo.png"> -->
+    <!--une adresse url menant au logo de votre site si vous voulez voir apparaitre ce logo pendant le paiement (Facultatif) -->
+
+    <input type="hidden" name="motif" value="paiement d’un article">
+    <!--le motif est facultatif. Si il est précisé, il sera inscrit dans votre historique DOHONE version excel. Ceci peut être important pour votre comptabilité. -->
+
+    <!-- <input type="submit" value="Valider"  > --> 
+    <!-- <button type="submit" value="Payer votre facture maintenant" ion-button block color="costom-orange" style="color:white;" >
+                 Payer votre Facture Maintenant
+    </button> -->
+
+    <button onclick="document.someForm.submit();"  ion-button block color="costom-orange" style="color:white;" > 
+      Payer votre facture maintenant
+    </button>
+                
+  </form>
+	
+	<p>
+		<button ion-button block color="costom-orange" style="color:white;" (click)="gotTheRoot()"> 
+			Continuer  vos achats
+		</button>
+	</p>
+
+</ion-content>

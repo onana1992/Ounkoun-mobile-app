@@ -1,0 +1,711 @@
+<ion-header [elasticHeader]="myContent">
+	<ion-navbar  color="header-color" >
+		<button left ion-button menuToggle style="min-width:40px;">
+		  <ion-icon name="menu"></ion-icon>
+		</button>
+		<ion-title>
+			<p style="color:orange; margin-left:-13px; font-size:22px;"> Ounkoun</p>
+		</ion-title>
+		<ion-buttons right>
+		  <button ion-button icon-only (click)="goTo('recherche')"><span style="font-size:17px;"><ion-icon name="search" ></ion-icon></span> 
+		  </button>
+		  <button ion-button icon-only (click)="goTo('favoris')">
+		  	<span style="font-size:16px;"><ion-icon name="heart" ></ion-icon></span><sup style="margin-left:-9px;margin-top:-7px;"><span style="background-color:orange; min-height:5px; min-width:5px; border-radius:60%;padding:5px; font-size:7px;" > <span style="position:relative;top:1px;font-size:8px;">{{favorisSize}}</span></span > </sup> 
+		  </button>		  
+			<button ion-button icon-only (tap)=" presentPopover($event)"><span style="font-size:16px;"><ion-icon name="more"></ion-icon></span>
+		   </button>
+		</ion-buttons>
+    </ion-navbar> 
+   
+	<ion-toolbar color="header-color" id="test_class" >
+		<ion-row style="color:white; margin-top:5px;margin-bottom:-4px; padding-bottom: 0px;">
+			
+			<ion-col col-4 style="text-align:center; padding-bottom: 0px;" [ngClass]="{active: tab==='tab1'}" > 
+				<ion-buttons>
+					<button ion-button icon-only (click)="changeTab('tab1')"><span style="font-size:16px;"><ion-icon name="home" ></ion-icon></span></button>
+					<br/><span style="font-size:12px;margin-top:0px;"> Accueil </span>
+				</ion-buttons>
+			</ion-col>
+
+			<ion-col col-4 style="text-align:center" [ngClass]="{active: tab==='tab2'}" > 
+				<ion-buttons>
+					<button ion-button icon-only (click)="changeTab('tab2')"><span style="font-size:16px;"><ion-icon name="person" ></ion-icon></span>
+					</button>
+					<br/><span style="font-size:12px;margin-top:-10px;"> Mon compte </span>
+				</ion-buttons>
+			</ion-col>
+
+			<ion-col col-4 style="text-align:center" [ngClass]="{active: tab==='tab3'}" > 
+				<ion-buttons>
+					<button ion-button icon-only (click)="changeTab('tab3')"><span style="font-size:16px;"><ion-icon name="cart" ></ion-icon></span><sup style="margin-left:-9px;margin-top:-6px;"><span style="background-color:orange; min-height:5px; min-width:5px; border-radius:60%;padding:5px; font-size:7px;" > <span style="position:relative;top:1px;font-size:8px;">{{panierSize}}</span></span > </sup> 
+					</button>
+					<br/><span style="font-size:12px;margin-top:-10px;"> Mon panier </span>
+				</ion-buttons>
+			</ion-col>
+
+		</ion-row>
+   </ion-toolbar> 
+</ion-header>
+
+<ion-content  class="home" fullscreen #myContent >
+	<ion-row>
+		<ion-col col-12 *ngIf="tab=='tab1'"  class="tab-acceuil" >
+			<div *ngIf="isLoadingProduits || isLoadingMarques || isLoadingBannieres" style="background-color:white;height:100%;">
+				<ion-row >
+					<ion-col style="text-align:center;margin-top:20px;">
+						Chargement du contenu, veuillez patienter ...
+						<img src="assets/imgs/loading.gif" height="100%" width="80%">
+					</ion-col>
+				</ion-row>
+			</div>
+			<div *ngIf="!isLoadingProduits && !isLoadingMarques && !isLoadingBannieres" style="background-color:#f5f5f5; margin-top: 4px;">
+
+				<ion-slides autoplay="3000" slidesPerView="1" loop="true" pager="true">
+					<ion-slide   >
+						<img (click)="openEnchere()" src="assets/imgs/ban-enchere.jpg" style=" height:30% ; width:100%;">
+					</ion-slide>
+					<ion-slide *ngFor="let banniere of bannieres ; let i = index" >
+						<img (click)="openCategorie(banniere.page)" [src]="baseUrl+'image/'+banniere.image" style=" height:30% ; width:100%;">
+					</ion-slide>
+				</ion-slides>
+
+				<ion-row style="margin-top:10px;margin-bottom:5px;">
+					<img src="assets/imgs/bretele2.png" height="100%" width="100%">
+				</ion-row>
+
+				<ion-slides  loop="true" slidesPerView="5" parallax="true" style="height: 60px;background-color:white;">
+					
+					<ion-slide  *ngFor="let marque of marques ; let i = index" (click)="openMarque(marque.name)">
+						<span><img src="assets/imgs/marque1.jpg" [src]="baseUrl+'image/'+marque.idLogo"></span>
+					</ion-slide>
+				</ion-slides>
+			
+				<!-- p style="border-bottom:1px solid black;padding-bottom:5px;font-weight:bold;"> Nos meilleures categories
+				</p>  -->
+				 <ion-row style="margin-top:10px;margin-bottom:5px;">
+					<img src="assets/imgs/bretele_m_categorie.png" height="60%" width="100%" style="height:60%;">
+				 </ion-row> 
+				<ion-row class="cat" style="font-size:8px; ">
+
+					<ion-col col-4 >
+						<div (click)="openCategorie('Telephonie et accessoires')" style="text-align:center;background-color:white; border-radius:5%;">
+							<div style="max-height:30px;min-height:30px;font-size:10px;padding-top:10px" >
+								 TELEPHONIE 
+							</div>
+							<div style="text-align:center;">
+								<img src="assets/imgs/cat2.jpg" height ="80%" width="70%"  >
+							</div>
+						</div>
+					</ion-col>
+
+					<ion-col col-4 >
+						<div (click)="openCategorie('Informatique')" style="text-align:center;background-color:white;border-radius:5%;">
+							<div style="max-height:30px;min-height:30px;font-size:10px;padding-top:10px;" >
+								 INFORMATIQUE
+							</div>
+							<div style="text-align:center;">
+								<img src="assets/imgs/cat3.jpg" height ="80%" width="70%"  >
+							</div>
+						</div>
+					</ion-col>
+					
+					<ion-col col-4 >
+						<div (click)="openCategorie('Boissons')" style="text-align:center;background-color:white; border-radius:5%;">
+							<div style="max-height:30px;min-height:30px;font-size:10px;padding-top:10px;">
+								 BOISSONS 
+							</div>
+							<div style="text-align:center;">
+								<img src="assets/imgs/cat 10.jpg" height ="80%" width="70%" >
+							</div>
+						</div>
+					</ion-col>
+					
+			
+					<ion-col col-4 >
+						<div (click)="openCategorie('Tv, audio et photo')" style="text-align:center;background-color:white;border-radius:5%;">
+							<div style="max-height:30px;min-height:30px;font-size:10px;padding-top:10px;">
+								 Tvs & AUDIO
+							</div>
+							<div style="text-align:center;">
+								<img src="assets/imgs/cat11.png" height ="80%" width="70%"  >
+							</div>
+						</div>
+					</ion-col>
+					
+			
+					<ion-col col-4 >
+						<div (click)="openCategorie('Beauté et santé')" style="text-align:center;background-color:white;border-radius:5%;">
+							<div style="max-height:30px;min-height:30px;font-size:10px;padding-top:10px" >
+								BEAUTE ET SANTE
+							</div>
+							<div style="text-align:center;">
+								<img src="assets/imgs/cat9.jpg" height ="80%" width="70%"  >
+							</div>
+						</div>
+					</ion-col>
+				
+					<ion-col col-4 >
+						<div (click)="openCategorie('Mode')"  style="text-align:center;background-color:white;border-radius:5%;">
+							<div style="max-height:30px;min-height:30px;font-size:10px;padding-top:10px;" >
+								 MODE
+							</div>
+							<div style="text-align:center;">
+								<img src="assets/imgs/cat6.jpg" height ="80%" width="70%"  >
+							</div>
+						</div>
+					</ion-col>
+				</ion-row>
+
+				<ion-row style="background-color: white; margin-bottom: 10px;">
+
+					<ion-col col-12 style=" margin-bottom: 0px; padding-bottom: 0px;" >
+						<p style="font-size: 10px; font-weight: bold; margin-top: 0px;text-align: center;">BESOIN D'UNE AIDE OU D'UNE ASSISTANCE,NOUS SOMMES TOUJOURS AU BOUT DU FILS POUR VOUS</p>
+					</ion-col>
+
+					<ion-col col-3 style=" border: 1px solid white; text-align: center; background-color: #333;"  >
+						<a style="text-decoration: none; font-size: 14px;" href="tel:+237699494380">	
+							<ion-icon ios="ios-call" md="md-call"></ion-icon>
+						</a>
+					</ion-col>
+
+					<ion-col col-3 style="text-align: center; border: 1px solid white; background-color: #333;" >
+						<a style="text-decoration: none;font-size: 14px; color: #25D366;" href="https://api.whatsapp.com/send?phone=23799494380">
+							<ion-icon name="logo-whatsapp"></ion-icon>
+						</a>
+					</ion-col>
+
+					<ion-col col-3 style="text-align: center; border: 1px solid white; background-color: #333;" >
+						<a style="text-decoration: none; color: #eb4924;" href="mailto:example@email.com">
+							<ion-icon  md="ios-mail-outline"></ion-icon>
+
+						</a>
+					</ion-col>
+
+					<ion-col col-3 style=" text-align: center; border: 1px solid white; background-color: #333;" >
+						<a style="text-decoration: none; color:  #efbc29
+							;" href="sms:237699494380">
+							<ion-icon ios="ios-chatboxes" md="md-chatboxes"></ion-icon>
+						</a>
+					</ion-col>
+
+				</ion-row>
+			
+				<!-- <p style="border-bottom:1px solid black;padding-bottom:5px;font-weight:bold;"> Nos Produits Du jour
+				</p> -->
+				<ion-row style="margin-top:10px;margin-bottom:0px;">
+					<img src="assets/imgs/bretele1.png" height="100%" width="100%">
+				</ion-row> 
+				<ion-row style="background-color: white; margin-top: 2px;">
+					<ion-slides autoplay="4000"  loop="true" slidesPerView="3" parallax="true" 
+						style="background-color:white;  min-height: 200px;">
+						<ion-slide  *ngFor="let produit of produits ; let i = index" style="margin-right:5px; border: 1px solid #f5f5f5; padding: 5px 5px 5px 5px;" (click)="gotoProduct(produit.name)">	
+							
+							<img src="assets/imgs/produit1.jpg" [src]="baseUrl+'image/'+produit.idImage" style=""/>
+
+							<p style="margin-top:0px;font-size:12px;color:black; text-align:center; padding: 1px 1px 1px 1px;">{{produit.name | limitTo:30}}
+							</p>
+
+							<p  style="margin-top:-5px; font-size:14px; font-weight: bold; color:black;text-align: center; padding: 1px 1px 1px 1px;" *ngIf="!produit.retailSale.isInPromotion"> 
+								{{produit.retailSale.price | currency:' ':'symbol':'1.0-0'}} FCFA
+							</p>
+
+							<p style="margin-top:-5px;font-size:14px;font-weight: bold; color:black; text-align:center; padding: 1px 1px 1px 1px;" *ngIf="produit.retailSale.isInPromotion">
+									{{produit.retailSale.promotionalPrice | currency:' ':'symbol':'1.0-0'}} FCFA
+							</p>
+						</ion-slide>
+					</ion-slides>
+				</ion-row>
+
+				<!-- categorie telephonie et accessoire -->
+				<ion-row *ngIf="bestTelephones.length!=0"  style="margin-top:10px;margin-bottom:0px;">
+					<img src="assets/imgs/bretele_telephonie.png" height="60%" width="100%" style="height:60%;">
+				</ion-row>
+
+				<ion-row *ngIf="bestTelephones.length!=0" style="margin-top:5px;margin-bottom:0px; background-color: white;">
+					<ion-col *ngFor="let telephone of bestTelephones ; let i = index"  col-4  style="text-align: center; border: 1px solid #f5f5f5;" >
+						<div (click)="gotoProduct(telephone.name)">
+
+							
+							<img  src="" [src]="baseUrl+'image/'+telephone.idImage" height="100">
+							
+							<p style="margin-top:0px;font-size:12px;color:black; text-align: center; padding: 1px 1px 1px 1px;">{{telephone.name | limitTo:25}}
+							</p>
+							<p style="margin-top:-10px;font-size:14px; font-weight: bold; color:black;text-align: left; padding: 1px 1px 1px 1px; min-height:40px; " *ngIf="!telephone.retailSale.isInPromotion"> 
+									{{telephone.retailSale.price  | currency:' ':'symbol':'1.0-0' }} FCFA
+							</p>
+							<p style="margin-top:-10px;font-size:14px; font-weight: bold; color:black; text-align: center; padding: 1px 1px 1px 1px;" *ngIf=" telephone.retailSale.isInPromotion">
+										{{telephone.retailSale.promotionalPrice  | currency:' ':'symbol':'1.0-0'}} FCFA
+										<!-- <sub style="text-decoration: line-through; font-size: 8px;" > {{telephone.retailSale.price  | currency:' ':'symbol':'1.0-0'}} FCFA</sub > -->
+							</p>
+						</div>
+					</ion-col>
+				</ion-row> 
+
+				
+				<ion-row style="margin-top:10px;margin-bottom:0px;padding-left: 0px; padding-right: 0px; margin-right: 0px; margin-left: 0px;">
+					<img src="assets/imgs/play1.jpg" height="100%" width="100%" style="height:100%;"
+					>
+				</ion-row>
+				
+
+				<!-- Boissons -->
+				<ion-row *ngIf="bestBoissons.length!=0" style="margin-top:10px;margin-bottom:0px;">
+					<img src="assets/imgs/bretele_boissons.png" height="60%" width="100%" style="height:60%;">
+				</ion-row> 
+
+				<ion-row *ngIf="bestBoissons.length!=0" style="margin-top:5px;margin-bottom:0px; background-color: white;">
+					<ion-col *ngFor="let boisson of bestBoissons ; let i = index"  col-4  style="text-align: center; border: 1px solid #f5f5f5;" >
+						<div (click)="gotoProduct(boisson.name)">
+							
+							<img  src="" [src]="baseUrl+'image/'+boisson.idImage" height="100" />
+							
+							<p style="margin-top:0px;font-size:12px;color:center; text-align: center; padding: 1px 1px 1px 1px;">{{boisson.name | limitTo:25}}
+							</p>
+							<p style="margin-top:-10px;font-size:14px; font-weight: bold; color:black;text-align: left; padding: 1px 1px 1px 1px;" *ngIf="!boisson.retailSale.isInPromotion"> 
+									{{boisson.retailSale.price  | currency:' ':'symbol':'1.0-0'}} FCFA
+							</p>
+							<p style="margin-top:-10px;font-size:14px; font-weight: bold;  color:black; text-align: center; padding: 1px 1px 1px 1px;" *ngIf="boisson.retailSale.isInPromotion">
+										{{boisson.retailSale.promotionalPrice  | currency:' ':'symbol':'1.0-0'}} FCFA
+										<!-- <sub style="text-decoration: line-through; font-size: 8px;" > {{boisson.retailSale.price  | currency:' ':'symbol':'1.0-0'}} FCFA</sub > -->
+							</p>
+						</div>
+					</ion-col>
+				</ion-row>
+
+				<!-- Beauté et santé -->
+				<ion-row *ngIf="bestbeautes.length!=0" style="margin-top:10px;margin-bottom:0px;">
+					<img src="assets/imgs/bretele_beaute.png" height="60%" width="100%" style="height:60%;">
+				</ion-row> 
+
+				<ion-row *ngIf="bestbeautes.length!=0" style="margin-top:5px;margin-bottom:0px; background-color: white;">
+					<ion-col *ngFor="let beaute of bestbeautes ; let i = index"  col-4  style="text-align: center; border: 1px solid #f5f5f5;" >
+						<div (click)="gotoProduct(beaute.name)">
+						
+							<img  src="" [src]="baseUrl+'image/'+beaute.idImage" height="100" />
+							
+							<p style="margin-top:0px;font-size:12px;color:black; text-align: center; padding: 1px 1px 1px 1px;">{{beaute.name | limitTo:25}}
+							</p>
+							<p style="margin-top:-10px;font-size:14px; font-weight: bold; color:black;text-align: left; padding: 1px 1px 1px 1px;" *ngIf="!beaute.retailSale.isInPromotion"> 
+									{{beaute.retailSale.price  | currency:' ':'symbol':'1.0-0'}} FCFA
+								</p>
+								<p style="margin-top:-10px;font-size:14px; font-weight: bold;  color:black; text-align: center; padding: 1px 1px 1px 1px;" *ngIf="beaute.retailSale.isInPromotion">
+										{{beaute.retailSale.promotionalPrice  | currency:' ':'symbol':'1.0-0'}} FCFA
+										<!-- <sub style="text-decoration: line-through; font-size: 8px;" > {{boisson.retailSale.price  | currency:' ':'symbol':'1.0-0'}} FCFA</sub > -->
+							</p>
+						</div>
+					</ion-col>
+				</ion-row>
+
+				<ion-row style="margin-top:10px;margin-bottom:0px;padding-left: 0px; padding-right: 0px; margin-right: 0px; margin-left: 0px;">
+					<img src="assets/imgs/livraison.jpg" height="100%" width="100%" style="height:100%;"
+					>
+				</ion-row>
+
+				<!-- tv audio et tvs -->
+				<ion-row *ngIf="bestTvs.length!=0" style="margin-top:10px;margin-bottom:0px;">
+					<img src="assets/imgs/bretele_tv.png" height="60%" width="100%" style="height:60%;">
+				</ion-row>
+
+				<ion-row *ngIf="bestTvs.length!=0" style="margin-top:5px;margin-bottom:0px; background-color: white;">
+					<ion-col *ngFor="let tv of bestTvs ; let i = index"  col-4  style="text-align: center; border: 1px solid #f5f5f5;" >
+						<div (click)="gotoProduct(tv.name)">
+							
+							<img  src="" [src]="baseUrl+'image/'+tv.idImage" height="100" />
+							
+							<p style="margin-top:0px;font-size:12px; color:black; text-align: center; padding: 1px 1px 1px 1px;">{{tv.name | limitTo:25}}
+							</p>
+
+							<p style="margin-top:-10px; font-size:14px; font-weight: bold;  color:black;text-align: center; padding: 1px 1px 1px 1px;" *ngIf="!tv.retailSale.isInPromotion"> 
+									{{tv.retailSale.price  | currency:' ':'symbol':'1.0-0'}} FCFA
+							</p>
+							<p style="margin-top:-10px;color:black; text-align: center; padding: 1px 1px 1px 1px;font-size:14px; font-weight: bold; " *ngIf=" tv.retailSale.isInPromotion">
+										{{tv.retailSale.promotionalPrice  | currency:' ':'symbol':'1.0-0'}} FCFA
+										
+							</p>
+						</div>
+					</ion-col>
+				</ion-row>
+
+				
+
+				<!-- Informatique -->
+				<ion-row *ngIf="informatiques.length!=0" style="margin-top:10px;margin-bottom:0px;">
+					<img src="assets/imgs/bretele_informatique.png" height="60%" width="100%" style="height:60%;">
+				</ion-row> 
+
+				<ion-row *ngIf="informatiques.length!=0" style="margin-top:5px;margin-bottom:0px; background-color: white;">
+					<ion-col *ngFor="let informatique of informatiques ; let i = index"  col-4  style="text-align: center; border: 1px solid #f5f5f5;" >
+						<div (click)="gotoProduct(informatique.name)">
+
+							
+
+							<img  src="" [src]="baseUrl+'image/'+informatique.idImage" height="100" />
+
+							
+							<p style="margin-top:0px;font-size:12px;color:black; text-align:center; padding: 1px 1px 1px 1px;">{{informatique.name | limitTo:25}}
+							</p>
+
+							<p style="margin-top:-10px;font-size:14px; font-weight: bold;  color:black;text-align: left; padding: 1px 1px 1px 1px;" *ngIf="!informatique.retailSale.isInPromotion"> 
+									{{informatique.retailSale.price  | currency:' ':'symbol':'1.0-0' }} FCFA
+							</p>
+
+							<p style="margin-top:-10px; font-size:14px; font-weight: bold;  color:black; text-align: justify; padding: 1px 1px 1px 1px;" *ngIf=" informatique.retailSale.isInPromotion">
+										{{informatique.retailSale.promotionalPrice  | currency:' ':'symbol':'1.0-0'}} FCFA
+										
+							</p>
+							
+						</div>
+					</ion-col>
+				</ion-row>
+
+
+				<ion-row style="margin-top:10px;margin-bottom:0px;">
+					<img src="assets/imgs/ban_paiement.jpg" height="100%" width="100%">
+				</ion-row>
+
+				<!-- Mode-->
+				<ion-row *ngIf="bestMode.length!=0" style="margin-top:10px;margin-bottom:0px;">
+					<img src="assets/imgs/bretele_mode.png" height="60%" width="100%" style="height:60%;">
+				</ion-row>
+
+				<ion-row *ngIf="bestMode.length!=0" style="margin-top:5px;margin-bottom:0px; background-color: white;">
+					<ion-col *ngFor="let mode of bestMode ; let i = index"  col-4  style="text-align: center; border: 1px solid #f5f5f5;" >
+						<div (click)="gotoProduct(mode.name)">
+							<img  src="" [src]="baseUrl+'image/'+mode.idImage" height="100">
+							
+							<p style="margin-top:0px;font-size:12px;color:black; text-align: center; padding: 1px 1px 1px 1px;">{{mode.name | limitTo:25}}
+							</p>
+							<p style="margin-top:-10px;font-size:14px; font-weight: bold; color:black;text-align: left; padding: 1px 1px 1px 1px; min-height:40px; " *ngIf="!mode.retailSale.isInPromotion"> 
+									{{mode.retailSale.price  | currency:' ':'symbol':'1.0-0' }} FCFA
+							</p>
+							<p style="margin-top:-10px;font-size:14px; font-weight: bold; color:black; text-align: center; padding: 1px 1px 1px 1px;" *ngIf=" mode.retailSale.isInPromotion">
+										{{mode.retailSale.promotionalPrice  | currency:' ':'symbol':'1.0-0'}} FCFA
+							</p>
+						</div>
+					</ion-col>
+				</ion-row> 
+
+				<!-- bébé enfant et jourt-->
+				<ion-row *ngIf="bestBb.length!=0" style="margin-top:10px;margin-bottom:0px;">
+					<img src="assets/imgs/bretele_bb.jpg" height="60%" width="100%" style="height:60%;"
+					>
+				</ion-row>
+
+				<ion-row *ngIf="bestBb.length!=0" style="margin-top:5px;margin-bottom:0px; background-color: white;">
+					<ion-col *ngFor="let bb of bestBb ; let i = index"  col-4  style="text-align: center; border: 1px solid #f5f5f5;" >
+						<div (click)="gotoProduct(bb.name)">
+							<img  src="" [src]="baseUrl+'image/'+bb.idImage" height="100">
+							
+							<p style="margin-top:0px;font-size:12px;color:black; text-align: center; padding: 1px 1px 1px 1px;">{{bb.name | limitTo:25}}
+							</p>
+							<p style="margin-top:-10px;font-size:14px; font-weight: bold; color:black;text-align: left; padding: 1px 1px 1px 1px; min-height:40px; " *ngIf="!bb.retailSale.isInPromotion"> 
+									{{bb.retailSale.price  | currency:' ':'symbol':'1.0-0' }} FCFA
+							</p>
+							<p style="margin-top:-10px;font-size:14px; font-weight: bold; color:black; text-align: center; padding: 1px 1px 1px 1px;" *ngIf=" bb.retailSale.isInPromotion">
+										{{bb.retailSale.promotionalPrice  | currency:' ':'symbol':'1.0-0'}} FCFA
+							</p>
+						</div>
+					</ion-col>
+				</ion-row>
+
+			</div><br>
+		</ion-col>
+		
+		
+		<ion-col col-12 *ngIf="tab=='tab2'" class="tab-compte" >
+			<div *ngIf="isLoadingConnection">
+				<ion-row >
+					<ion-col style="text-align:center; text-color:gray;margin-top:30px;">
+						Authentification,veuillez patienter ...
+						<br/>
+						<img src="assets/imgs/loading.gif" height="80%" width="80%">
+					</ion-col>
+				</ion-row>
+			</div>
+			<div *ngIf="!isLoadingConnection && !isConnected" class="no-connected" style="margin-bottom:30px;">
+				<ion-row>
+					<ion-col col-12>
+						<h4 style="color:gray;text-align:center;">Identifier Vous </h4>
+					</ion-col>
+				</ion-row>
+				<ion-row *ngIf="isLoginFailled">
+					<ion-col col-12>
+						<p style="color:red;text-align:center; font-size:14px;">Mot de passe ou login incorrect </p>
+					</ion-col>
+				</ion-row>
+				<form novalidate #form="ngForm" (ngSubmit)="submitForm(form)">
+					<ion-row *ngIf="loginFormSubmitted && form.invalid">
+						
+					</ion-row>
+					<ion-list>
+						<ion-item>
+							<ion-label  floating>Email/tel</ion-label>
+							<ion-input id="login"
+								   name="login"
+								   required  
+								  [(ngModel)]="user.login" 
+								  #login="ngModel">
+							</ion-input>
+						</ion-item>
+						<ion-row *ngIf="login.invalid && ( login.dirty || registrationFormSubmitted)">
+							<ion-col *ngIf="login.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+								Email ou numero de telephone requis
+							</ion-col>
+							<ion-col *ngIf="login.errors.pattern" style="font-size:10px;color:red;padding-left:15px;">
+								Entrer une adresse email ou un numero de telephone valide
+							</ion-col>
+						</ion-row> 
+						<ion-item>
+							<ion-label floating >mot de passe</ion-label>
+							<ion-input type="password" name="password"
+										[(ngModel)]="user.password"
+										#password="ngModel"
+										required
+										>
+							</ion-input>
+						</ion-item>
+						<ion-row *ngIf="password.invalid && (password.dirty || loginFormSubmitted)">
+							  <ion-col *ngIf="password.errors.required" style="font-size:10px;color:red;padding-left:15px;">
+								Mot de passe requis:
+							  </ion-col>
+						</ion-row>
+					</ion-list>
+					<ion-row   class="pass-forget">
+						<ion-col col-12 (click)="goTo('recover')"> mot de passe oublier ?</ion-col>
+					</ion-row>
+					<br/><br/>
+					<ion-row>
+						<ion-col col-12>
+							<button ion-button block color="costom-orange">Connectez vous </button>
+						</ion-col>
+					</ion-row><br/>
+					<p style="text-align:center;color:gray;">Nouveau sur ounkoun ? <span style="color:#488aff;font-size:18px;"(click)="goTo('inscription')">Creer un compte</span></p><br/><br/>
+					<br/><br/>
+				</form>
+			</div>
+			<div *ngIf="!isLoadingConnection && isConnected" class="connected">
+				<ion-row style="border-bottom:1px solid gray;">
+					<ion-col col-4 style="text-align:center; margin-top:5px;">
+						<div id="circle">
+							<div><ion-icon name="person"></ion-icon></div>
+						</div>
+					</ion-col>
+					<ion-col col-8 style="text-align:left;">
+						
+						<p style="text-align:left;font-size:18px;">{{user.pseudo | uppercase }}</p>
+						<p style="color:;margin-top:-20px;">vous êtes connecté</p>
+					</ion-col>
+				</ion-row><br/>
+				<ion-list >
+					<button ion-item (click)="goTo('profil')">
+						<ion-icon name="ios-contact-outline" item-start></ion-icon>
+						<p style="font-size:18px; color:black;">Mon profil</p>
+					</button>
+					<button ion-item (click)="goTo('password')">
+						<ion-icon name="ios-unlock-outline" item-start></ion-icon>
+						<p style="font-size:18px;color:black;">Changer mon mot de passe</p>
+					</button>
+					<button ion-item (click)="goTo('favoris')">
+						<ion-icon name="ios-heart-outline" item-start></ion-icon>
+						<p style="font-size:18px;color:black;">Mes produits favoris</p>
+					</button>
+					<button ion-item (click)="goTo('adresse')">
+						<ion-icon name="ios-home-outline" item-start></ion-icon>
+						<p style="font-size:18px;color:black;"> Mon adresse </p>
+					</button>
+					<button ion-item (click)="goTo('commande')" >
+						<ion-icon name="ios-basket-outline" item-start></ion-icon>
+						<p style="font-size:18px;color:black;"> Mes commandes</p>
+					</button>
+					<button ion-item *ngIf="isConnected" (click)="goTo('mesEncheres')" >
+ 						<ion-icon name="ios-hammer-outline" item-start >
+ 						</ion-icon>
+ 						<p style="font-size:18px;color:black;">Mes enchères</p>
+					</button>
+					<button ion-item (click)="disconnect()">
+						<ion-icon name="ios-power-outline" item-start></ion-icon>
+						<p style="font-size:18px;color:black;"> Deconnexion </p>
+					</button>
+
+				</ion-list>
+			</div><br/><br/><br/><br/><br/><br/><br/>
+		</ion-col >
+		
+		
+		<ion-col col-12 *ngIf="tab=='tab3'" class="tab-panier">
+		    <ion-row *ngIf="isLoading">
+				<ion-col style="text-align:center; text-color:gray;margin-top:30px;">
+					Chargement du panier,veuillez patienter ...
+					<img src="assets/imgs/loading.gif" height="80%" width="80%">
+				</ion-col>
+			</ion-row>
+			<ion-row *ngIf="panierVide">
+				<ion-col style="text-align:center; margin-top:30px;">
+					Votre panier est vide, veuillez poursuivre vos achat et ajouter des produits
+				</ion-col>
+			</ion-row>
+			<ion-row *ngIf="isLoadingDelete">
+				<ion-col style="text-align:center; margin-top:30px;">
+					Suppression de l'article,veuillez patienter ...
+					<ion-col style="text-align:center; text-color:gray;margin-top:30px;">
+						<img src="assets/imgs/loading.gif" height="80%" width="80%">
+					</ion-col>
+				</ion-col>
+			</ion-row>
+			<ion-row *ngIf="!isLoading && !isLoadingDelete && !panierVide">
+				<ion-col col-12>
+					<ion-row  style="border-bottom: 1px solid gray;" *ngFor="let item of arrayPanier;let i = index">
+						<ion-col col-2>
+							<p  style="text-align:center"> 
+							<img src="" [src]="baseUrl+'image/'+item.product.idImage" style="height:60px;"/></p>
+						</ion-col >
+						<ion-col col-9>
+							<p style="color:gray;font-size:12px;">{{item.product.marque.name}}</p>
+							<p  style="margin-top:-10px;font-size:14px;">{{item.product.name}}</p>
+							<p style="margin-top:-10px;font-size:14px; font-weight:bold;" *ngIf="!item.product.retailSale.isInPromotion"> 
+								<span>{{item.product.retailSale.price | currency:' ':'symbol':'1.0-0'}} FCFA</span> 
+							</p>
+							<p style="margin-top:-10px;font-size:14px; font-weight: bold;" *ngIf="item.product.retailSale.isInPromotion">
+								<span> {{item.product.retailSale.promotionalPrice | currency:' ':'symbol':'1.0-0'}} FCFA</span>
+								<sub style="text-decoration: line-through; font-size: 12px;font-weight: bold;" > {{item.product.retailSale.price | currency:' ':'symbol':'1.0-0'}} FCFA</sub >
+							</p>
+							<p *ngIf="item.product.quantity==0" style="color:red; margin-bottom:-5px; margin-top:-5px; padding-bottom=0px; padding-top:0px;"> Epuisé en stock</p>
+							<ion-row>
+								<ion-col center col-12 style="text-align:center;">
+								<ion-item no-lines>
+								<ion-label>Choisir la quantite:</ion-label>
+								<ion-select [(ngModel)]="item.number"  (ngModelChange)="changeNumber($event,item.product.id)">
+									<ion-option *ngFor="let val of arraySize[i]" value="{{val}}" [selected]="val==item.number" >{{val}}</ion-option>
+								</ion-select>
+								</ion-item>
+								</ion-col>
+							</ion-row>
+							<ion-row *ngIf="item.number> arraySize[i].length">
+								<ion-col style="color:red; font-size:12px; margin-top: -10px;">
+									quantité indisponible, choisir une quantité disponible
+								</ion-col>
+							</ion-row>
+							
+						</ion-col>
+						<ion-col col-1 >
+							<ion-icon name="ios-trash-outline" (click)="confirmDelete(item.product,$event)" > </ion-icon>
+						</ion-col >
+				
+						<ion-col col-12 > 
+							<ion-row style="font-weight:bold;border:1px solid gray;" [ngClass]="{epuise: item.product.quantity==0 || item.number> arraySize[i].length }">
+								<ion-col  col-6 style="text:center;">
+										SOUS-TOTAL: 
+								</ion-col>
+								<ion-col center  col-6 style="text-align:center;">
+									<span *ngIf="!item.product.retailSale.isInPromotion">
+										{{item.product.retailSale.price * item.number | currency:' ':'symbol':'1.0-0'}} FCFA
+									</span>
+									<span *ngIf="item.product.retailSale.isInPromotion">
+										{{item.product.retailSale.promotionalPrice * item.number| currency:' ':'symbol':'1.0-0' }} FCFA
+									</span>
+								</ion-col>
+							</ion-row>
+						</ion-col>
+					</ion-row>
+	
+					<ion-row  style="font-weight:bold; margin-top:0px;">
+						<ion-col  col-6 style="text-align:center;">
+							TOTAL : 			 
+						</ion-col>
+						<ion-col center  col-6 style="text-align:center;">
+										{{prixTotal | currency:' ':'symbol':'1.0-0'}} FCFA
+						</ion-col>
+						
+						<ion-col center  col-12 style="text-align:center;">
+							<ion-row>
+								<ion-col col-10>
+									<ion-item>
+										<ion-input placeholder="Entrer le numero votre coupon"> </ion-input>
+									</ion-item>
+								</ion-col>
+								<ion-col col-2>
+									<button color="costom-orange" ion-button>Ok</button>
+								</ion-col>
+							</ion-row>
+						</ion-col>
+						<ion-col col-12> 
+						
+							<ion-row style="border-top:1px solid white;color:black;font-size:16px;">
+								<ion-col  col-6 style="text-align:center;">
+										TOTAL: 
+								</ion-col>
+								<ion-col center  col-6 style="text-align:center;">
+										{{prixTotal | currency:' ':'symbol':'1.0-0'}} FCFA
+								</ion-col>
+							</ion-row>
+						</ion-col>
+						<ion-col center  col-12 style="text-align:center;margin-top:-10px;">
+							<p>
+							<button ion-button block color="costom-orange" style="color:white;" (click)="openCommande()"> Valider la commande </button>
+							</p>
+						</ion-col>
+						<ion-col center  col-12 style="text-align:center;margin-top:-20px; margin-bottom:40px;">
+							<p>
+								
+								<button text-wrap ion-button block  style="background-color: #25D366; color:white;" (click)="sendByWhatsApp()">
+									<ion-icon name="logo-whatsapp" style="margin-right: 3px; font-size: 25px;color: black;" ></ion-icon> Passer votre commande via Whattsapp 
+								</button>
+							</p>
+						</ion-col>			
+					</ion-row>	
+			    </ion-col> 
+			</ion-row>
+		</ion-col>
+	</ion-row>
+	
+	<ion-row *ngIf="!isLoadingProduits && tab=='tab1' " style="min-height:190px;background-color:#333;padding-left:0px;padding-right:0px; margin-top:0px; margin-left:0px;margin-right:0px;">
+	   <ion-col col-4 style="margin-top:10px;color:white;text-align:center;">
+	     <span style="font-size:14px;" (click)="goTo('aide')">Aide </span>
+	   </ion-col>
+	   
+	   <ion-col col-4 style="margin-top:10px;color:white;text-align:center;">
+	     <span style="font-size:14px;" (click)="goTo('contact')" >Contact </span>
+	   </ion-col>
+	   
+	   <ion-col col-4 style="margin-top:10px;color:white;text-align:center;">
+	     <span style="font-size:14px;" (click)="goTo('about')">A propos </span>
+	   </ion-col>
+        
+	  	
+	   <ion-col col-2 style="color:white; margin-top: -40px;text-align:center;">
+	   </ion-col>
+		   
+	   <ion-col col-2 style="color:white; margin-top: -40px;text-align:center;">
+	   	<a href="https://www.facebook.com/ounkouncameroon/"> 
+		     <img src="assets/imgs/icons_Facebook.png" style=" height:50% ; width:60%;">
+		</a>
+	   </ion-col>
+		   
+		<ion-col col-2 style="color:white; margin-top: -40px;text-align:center;">
+			<a href="https://twitter.com/ounkoun237">
+		     <img src="assets/imgs/icons_Twitter.png" style=" height:50% ; width:60%;">
+		    </a> 
+		</ion-col>
+		   
+		<ion-col col-2 style="color:white; margin-top: -40px;text-align:center;">
+			<a href="https://www.instagram.com/ounkoun_officielle/">
+		     <img src="assets/imgs/icons_Instagram.png" style=" height:50% ; width:60%;">
+		    </a> 
+		</ion-col> 
+
+		 <ion-col col-2 style="color:white; margin-top: -40px;text-align:center;">
+		 	<a href="https://www.youtube.com/channel/UCexfHJi1AkdkT4FRVdVnHZQ">
+		     <img src="assets/imgs/icons_youtube.png" style=" height:50% ; width:60%;">
+		    </a>
+		</ion-col>
+
+		<ion-col col-2 style="color:white; margin-top: -37px;text-align:center;">
+		
+		</ion-col>
+
+		<ion-col col-12 style="color:white; margin-top: -47px;text-align:center; font-size:12px;">
+		     Powered by NANO-TECH SARL
+		</ion-col>
+	</ion-row> 
+
+</ion-content>

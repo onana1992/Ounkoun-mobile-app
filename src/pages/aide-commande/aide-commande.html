@@ -1,0 +1,164 @@
+
+<ion-header>
+	<ion-navbar color="header-color">
+    	<ion-title><span style=" font-size:16px;">Comment Commander ? </span></ion-title>
+  	</ion-navbar>
+</ion-header>
+
+
+<ion-content >
+
+	<h6 style="text-align: center;">Deux procédures au choix</h6>
+
+	<ul> 
+		<li (click)="scrollTo('cmd1')" style="text-decoration:none; color: blue;"> Commande traditionel  </li>
+		<li (click)="scrollTo('cmd2')" style="text-decoration:none; color: blue;"> Commande rapide onclick social selling via whatsapp 
+		</li>
+
+	</ul>
+
+	<h6 id="cmd1" style="text-align: center;">Commande traditionel</h6>
+	
+	<ol> 
+		<li> Recherche du(des) produit(s)  </li>
+		<p style="text-align: justify;margin-left: -20px;margin-right: 20px;">
+			La première étape lorsque vous désirez passer une commande est de retrouver le(s) produit(s) que vous souhaitez commander. Pour retrouver vos produits vous disposez d'un large choix d'outils tous aussi intuisifs les uns et les autres. Vous pouvez ainsi  opter soit pour une navigation par categories , marques ou par boutiques soit  alors faire une recherche textuelle de votre produit. Pour pouvez également faciliter vos recherches usant des filtres (par sous-categories, par marques et par prix) disponible dans les pages de resultats de recherches  
+		</p>
+		<div style="margin-left: -40px;margin-top:20px ">
+			<ion-slides autoplay="5000" slidesPerView="1" loop="true" pager="true">
+					<ion-slide   >
+						Navigation par categorie
+						<img  src="assets/imgs/screen-hot/1.png" style=" height:30% ; width:70%;">
+					</ion-slide>
+					<ion-slide  >
+						Recherche textuelle 
+						<img src="assets/imgs/screen-hot/2.png"  style=" height:30% ; width:70%;">
+					</ion-slide>
+					<ion-slide  >
+						Recherche textuelle
+						<img src="assets/imgs/screen-hot/3.png"  style=" height:30% ; width:70%;">
+					</ion-slide>
+					<ion-slide  >
+						Resultat de la recherche
+						<img src="assets/imgs/screen-hot/4.png"  style=" height:30% ; width:70%;">
+					</ion-slide>
+					<ion-slide  >
+						Filtre sur les resultats de la recherche
+						<img src="assets/imgs/screen-hot/5.png"  style=" height:30% ; width:70%;">
+					</ion-slide>
+			</ion-slides>
+		</div><br>
+
+		<li> Ajout du(des) produit(s) dans le panier </li>
+		<p style="text-align: justify;margin-left: -20px;margin-right: 20px;">
+			Lorsque vous avez 		déja retrouver le produit que vous souhaitez commander, vous pouvez l'ajouter dans votre 			panier en cliquant sur le bouton "Acheter" dans les pages de catalogues ou sur le 			button "Ajouter dans le panier" dans les pages produits.
+		</p>
+		<div style="margin-left: -40px;margin-top:20px ">
+			<ion-slides autoplay="5000" slidesPerView="1" loop="true" pager="true">
+				<ion-slide   >
+						<img  src="assets/imgs/screen-hot/6.png" style=" height:30% ; width:70%;">
+				</ion-slide>
+				<ion-slide  >
+						<img src="assets/imgs/screen-hot/7.png"  style=" height:30% ; width:70%;">
+				</ion-slide>
+			</ion-slides>
+		</div><br>
+
+		<li> Connexion </li>
+		<p style="text-align: justify;text-align: justify;margin-left: -20px; margin-right: 20px;"> 	 	La validation de votre commande nécessite au préalable que soyez connecter. Pour 		  vous connecter, renseigner tout simplement  votre émail ou numéro de télephone 			 ainsi que votre mot de passe d'inscription.
+		</p>
+		<div style="margin-left: 0px;margin-top:20px ">	
+			<img  src="assets/imgs/screen-hot/11.png" style="height:30% ; width:70%;">
+		</div><br>
+
+		<li> Passer à la validation de la commande </li>
+		<p style="text-align: justify;text-align: justify;margin-left: -20px; margin-right: 20px;"> Après avoir ajouter le(s) produits dans votre panier, vous pouvez maintenant ouvrir votre panier et passer à la procedure de commande en cliquant sur le button "Valider la commande"</p>
+		<div style="margin-left: 0px;margin-top:20px ">	
+			<img  src="assets/imgs/screen-hot/8.png" style="height:30% ; width:70%;">
+		</div><br>
+
+		<li> Creation/modification/confirmation de l'adresse de livraison par defaut </li>
+		<p style="text-align: justify;margin-left: -20px;margin-right: 20px;">
+			Pour passer une commande vous devez obligatoirement renseigner et confirmer  votre adresse de livraison par defaut. Vous devez si vous l'avez pas encore fait, creer une adresse de livraison ou au cas contraire l'a modifier si vous le souhaitez.
+        </p>
+        <div style="margin-left: -40px;margin-top:20px ">
+			<ion-slides autoplay="5000" slidesPerView="1" loop="true" pager="true">
+					<ion-slide   >
+						<img  src="assets/imgs/screen-hot/9.png" style=" height:30% ; width:70%;">
+					</ion-slide>
+					<ion-slide  >
+						<img src="assets/imgs/screen-hot/10.png"  style=" height:30% ; width:70%;">
+					</ion-slide>
+			</ion-slides>
+		</div>
+
+		<li> choix du mode livraison</li>
+		<p style="text-align: justify;margin-left: -20px;margin-right: 20px;">
+			Deux modes livraisons sont possible: la livraison à domicile et la livraison par expédition aux points de relais. vous devez obligatoirement choisir un mode livraison avant de continuer.
+        </p>
+        <div style="margin-left: 0px;margin-top:20px ">	
+			<img  src="assets/imgs/screen-hot/12.png" style="height:30% ; width:70%;">
+		</div><br>
+
+
+
+		<li> choix du mode de paiement</li>
+		<p style="text-align: justify;margin-left: -20px;margin-right: 20px;">
+			Deux modes de paiements sont également disponibles. Le paiement à la livraison exclusivement possible pour les livraisons à domicile et le paiement électronique directement accessible sur l'application. 
+		<div style="margin-left: 0px;margin-top:20px ">	
+			<img  src="assets/imgs/screen-hot/13.png" style="height:30% ; width:70%;">
+		</div><br>
+
+		<li> Paiement de la facture</li>
+			Une fois la commande passée,vous recevez une confirmation par email ou par sms et vous pouvez dès lors  passer directement au paiement de votre facture via le module de paiement integré de l'application.
+		<div style="margin-left: -40px;margin-top:20px ">
+			<ion-slides autoplay="5000" slidesPerView="1" loop="true" pager="true">
+					<ion-slide   >
+						<img  src="assets/imgs/screen-hot/14.png" style=" height:30% ; width:70%;">
+					</ion-slide>
+					<ion-slide  >
+						<img src="assets/imgs/screen-hot/15.png"  style=" height:30% ; width:70%;">
+					</ion-slide>
+			</ion-slides>
+		</div>
+	</ol>
+	<br>
+
+	<h6 id="cmd2" style="text-align: center;">Commande rapide oneclick via whatsapp</h6>
+	
+	<ol> 
+		<li> Recherche du(des) produit(s)</li>
+		<li> Ajout de plusieurs produits dans le panier / envois direct de la commande au service client d’un produit sur whatsapp 
+		</li>
+		<div style="margin-left: -40px;margin-top:20px ">
+			<ion-slides autoplay="5000" slidesPerView="1" loop="true" pager="true">
+					<ion-slide   >
+						<img  src="assets/imgs/screen-hot/16.png" style=" height:30% ; width:70%;">
+					</ion-slide>
+					<ion-slide  >
+						<img src="assets/imgs/screen-hot/17.png"  style=" height:30% ; width:70%;">
+					</ion-slide>
+					<ion-slide  >
+						<img src="assets/imgs/screen-hot/18.png"  style=" height:30% ; width:70%;">
+					</ion-slide>
+			</ion-slides>
+		</div><br>
+
+		<li> Passage de la commande constituée des produits ajoutés dans le panier au service client via whatsapp 
+		</li>
+		<div style="margin-left: -40px;margin-top:20px ">
+			<ion-slides autoplay="5000" slidesPerView="1" loop="true" pager="true">
+					<ion-slide   >
+						<img  src="assets/imgs/screen-hot/19.png" style=" height:30% ; width:70%;">
+					</ion-slide>
+					<ion-slide  >
+						<img src="assets/imgs/screen-hot/17.png"  style=" height:30% ; width:70%;">
+					</ion-slide>
+					<ion-slide  >
+						<img src="assets/imgs/screen-hot/18.png"  style=" height:30% ; width:70%;">
+					</ion-slide>
+			</ion-slides>
+		</div><br>
+	</ol>
+	
+</ion-content>

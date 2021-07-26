@@ -1,0 +1,103 @@
+<ion-header>
+  <ion-navbar color="header-color">
+    <ion-title><span style=" font-size:16px;">Selection du jour</span></ion-title>
+	<ion-buttons right>
+      <button ion-button icon-only (click)="goTorecheche()" ><ion-icon name="search" ></ion-icon></button>
+	  <button ion-button icon-only (click)="openFavoris()" ><span style="font-size:16px;"><ion-icon name="heart"></ion-icon></span><sup style="margin-left:-9px;margin-top:-7px;"><span style="background-color:orange; min-height:5px; min-width:5px; border-radius:60%;padding:5px; font-size:7px;" > <span style="position:relative;top:1px;font-size:8px;">{{favorisSize}}</span></span > </sup> </button>
+	  <button ion-button icon-only (click)="openPanier()"><span style="font-size:16px;"><ion-icon name="cart" ></ion-icon></span><sup style="margin-left:-9px;margin-top:-7px;"><span style="background-color:orange; min-height:5px; min-width:5px; border-radius:60%;padding:5px; font-size:7px;" > <span style="position:relative;top:1px;font-size:8px;">{{panierSize}}</span></span > </sup></button>
+	  <button ion-button icon-only (tap)=" presentPopover($event)" ><ion-icon name="more"></ion-icon>
+	  </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<div style="text-align:center;" *ngIf="showMessageAjoutFavori">
+	<ion-row  class="info-favori">
+		<ion-col col-12 >
+			le produit a été ajouté avec succes dans vos favoris
+		</ion-col>
+		<ion-col col-12 style="text-align:center;margin-top:-10px;font-size:10px;">
+			<button ion-button round color="costom-orange"  (click)="openFavoris()"><span  style="text-align:center;margin-top:0px;font-size:10px;">voir vos favoris</span></button>
+		</ion-col>
+	</ion-row>
+</div>
+
+<div style="text-align:center;" *ngIf="showMessageAjoutPanier">
+	<ion-row  class="info-panier">
+		<ion-col col-12 >
+			le produit a été ajouté avec succès dans votre panier
+		</ion-col>
+		<ion-col col-12 style="text-align:center;margin-top:-10px;font-size:10px;">
+			<button (click)="openPanier()" ion-button round color="costom-orange"><span  style="text-align:center;margin-top:0px;font-size:10px;">voir votre panier</span>
+			</button>
+		</ion-col>
+	</ion-row>
+</div>
+
+
+<ion-content fullscreen #myContent hide-fab>	
+
+    <ion-fab bottom right>
+			<button   ion-fab (click)="scrollToTop()" style="background-color:gray;" > <ion-icon name="md-arrow-up"></ion-icon>
+			</button>
+	</ion-fab>
+	
+
+	<ion-row *ngIf="isLoading">
+		<ion-col style="text-align:center;margin-top:20px;">
+			Chargement des produits, veuillez patienter ...
+			<img src="assets/imgs/loading.gif" height="80%" width="80%">
+		</ion-col>
+	</ion-row>
+
+	<div *ngIf="!isLoading">	
+	    <div class="model3" >
+			
+			<ion-row *ngFor="let produit of produits">
+				<ion-item wrap (click)="gotoProduct(produit.name)" >
+					<ion-row>
+						<ion-col col-4>
+							<p  style="text-align:center"> 	
+								<img src="assets/imgs/produit1.jpg" [src]="baseUrl+'image/'+produit.idImage" style=""/>
+							</p>
+						</ion-col >
+						<ion-col col-8 class="no-border">
+							<ion-item text-wrap >
+								
+								<p  style="margin-top:0px;font-size:14px;color:black;"> {{produit.name | limitTo:80}}</p>
+								<p style="margin-top:0px;font-size:12px;color:black;font-weight: bold;" *ngIf="!produit.retailSale.isInPromotion"> 
+									<span>{{produit.retailSale.price | currency:' ':'symbol':'1.0-0'}} FCFA</span> 
+								</p>
+								<p style="margin-top:0px; font-size:12px; color:black;font-weight: bold;" *ngIf="produit.retailSale.isInPromotion">
+									<span> {{produit.retailSale.promotionalPrice | currency:' ':'symbol':'1.0-0'}} FCFA</span>
+									<sub style="text-decoration: line-through;color:black; font-size: 12px;font-weight: bold;" > {{produit.retailSale.price | currency:' ':'symbol':'1.0-0'}} FCFA</sub >	
+								</p>
+								<p *ngIf="produit.retailSale.isInPromotion" style="text-align:rigth; margin-top:-2px; font-size:10px; border: 1px solid orange; width:30px;  text-align:center; color:orange; font-weight:bold;"> -{{100-(produit.retailSale.promotionalPrice/produit.retailSale.price*100) | number:'0.0-0'}}% </p>
+								
+
+								<p style=" color:#007bb6; font-size:22px; margin-right: 5px;" >
+									<ion-icon style ="font-size:22px;" name="heart" (click)="addFavorite(produit,$event)" > </ion-icon>
+									<a  (click)="stopPropagation('xxx',$event)" style="text-decoration: none;font-size: 14px; color: #25D366;" href="https://api.whatsapp.com/send?phone=23799494380&text=*OUNKOUN* - Je sohaiterais acheter le {{produit.name}}">
+									<ion-icon name="logo-whatsapp"></ion-icon>
+									</a>
+								</p>
+
+								 <p style="text-align:center;margin-top:0px;"><button [disabled]="produit.quantity==0" color="costom-orange" ion-button round (click)="addPanier(produit,$event)"><span style=" font-size:10px;">Acheter</span></button>
+								</p>
+								<p *ngIf="produit.quantity==0" style="color:red;text-align: center; font-style:italic;font-size:12px;">Stock épuisé
+								</p> 
+							</ion-item>
+						</ion-col>
+					</ion-row>
+				</ion-item>
+			</ion-row>
+	 	</div>  
+	</div>
+
+
+</ion-content>
+
+
+
+

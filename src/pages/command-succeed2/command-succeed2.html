@@ -1,0 +1,71 @@
+<ion-header>
+ <ion-navbar color="header-color">
+    <ion-title><span style=" font-size:16px;">Commande enregistreée</span></ion-title>
+	<ion-buttons right>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+    <h4 style="color:#EE7600"> Merci {{prenom}} {{nom}} ! votre commande a  été enregistrée avec succès.
+    </h4>
+
+    <!-- <ion-row >
+		<ion-col col-12 style="text-align:center; text-color:gray;margin-top:30px;">
+			<img src="../assets/imgs/logo.gif" height="60%" width="60%">
+		</ion-col>
+	</ion-row> -->
+	
+	<ion-row >
+		<ion-col col-12 style="text-align:center; text-align:justify; font-weight:bold;">
+			Votre commande a bien été enregistrée.Nous vous remercions de la confiance que vous nous accorder.
+			Nous traitons promptement votre commande, vous serez contacter dans les instants à venir pour 
+			la confirmation de votre commande.
+		</ion-col><br/>
+    </ion-row>
+
+    <h5 style="color:#EE7600">Payer votre facture:</h5>
+
+    <ion-row>
+        <ion-col col-12>
+            <ion-list radio-group [(ngModel)]="choixPaiement" >
+
+                <ion-item>
+                    <ion-label text-wrap> 
+                        <span style="font-weight:bold;">Orange Money:</span>
+                    </ion-label>
+                    <ion-radio value="orange"></ion-radio>
+                </ion-item>
+
+                <ion-item>
+                    <ion-label text-wrap style="font-weight:bold;">
+                        <span style="font-weight:bold;">MTN Mobile Money:</span> 
+                    </ion-label>
+                    <ion-radio value="mtn" ></ion-radio>
+                </ion-item>
+
+                <ion-item>
+                    <ion-label text-wrap style="font-weight:bold;">
+                        <span style="font-weight:bold;">Express union:</span> 
+                    </ion-label>
+                    <ion-radio value="ue" ></ion-radio>
+                </ion-item>
+            </ion-list>
+        </ion-col>  
+    </ion-row>
+
+        <p>
+            <button ion-button block color="costom-orange" style="color:white;" (click)="goToPaiement()"> 
+                Passer au paiement
+            </button>
+        </p>
+
+        <p>
+            <button ion-button block color="costom-orange" style="color:white;" (click)="gotTheRoot()"> 
+                Continuer vos achats
+            </button>
+        </p>
+        
+</ion-content>
